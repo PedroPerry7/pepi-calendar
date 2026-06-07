@@ -180,8 +180,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
       <button class="btn-icon btn-refresh" id="btnRefresh" onclick="doRefresh()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
       </button>
-      <button class="btn-icon" onclick="doSync()">
+      <button class="btn-icon" onclick="doSync()" title="Sincronizar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h4M18 12h4M12 2v4M12 18v4"/></svg>
+      </button>
+      <button class="btn-icon" onclick="exportExcel()" title="Exportar Excel" style="background:rgba(33,115,70,0.25);border-color:rgba(33,180,100,0.4);color:#4ec47a">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/><path d="m6 13 2 2-2 2M13 13h3M13 17h3"/></svg>
       </button>
     </div>
   </div>
@@ -382,7 +385,7 @@ const BASE_FPP_2026=[
 {id:'26-fpp-vilamoura-summer',y:2026,name:'Vilamoura Summer Cup',city:'Vilamoura',country:'POR',tier:'fpp',pts:0,dateStart:'2026-08-14',dateEnd:'2026-08-16',draw:'2026-08-14',fpp:true},
 {id:'26-fpp-padel4move',y:2026,name:'4º Open Padel4move',city:'Albufeira',country:'POR',tier:'fpp',pts:0,dateStart:'2026-08-21',dateEnd:'2026-08-23',draw:'2026-08-21',fpp:true},
 {id:'26-fpp-campus-qlago',y:2026,name:'The Campus Open',city:'Quinta do Lago',country:'POR',tier:'fpp',pts:0,dateStart:'2026-09-11',dateEnd:'2026-09-13',draw:'2026-09-11',fpp:true},
-{id:'26-fpp-douro-padel',y:2026,name:'Open D'Ouro Padel',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-09',dateEnd:'2026-10-11',draw:'2026-10-09',fpp:true},
+{id:'26-fpp-douro-padel',y:2026,name:'Open D\`Ouro Padel',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-09',dateEnd:'2026-10-11',draw:'2026-10-09',fpp:true},
 {id:'26-fpp-cpa-cascais',y:2026,name:'VI Open CPA Cascais',city:'Cascais',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-09',dateEnd:'2026-10-11',draw:'2026-10-09',fpp:true},
 {id:'26-fpp-pro-padel-torres',y:2026,name:'2º Open Pro Padel Academy',city:'Torres Vedras',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-20',dateEnd:'2026-10-25',draw:'2026-10-20',fpp:true},
 {id:'26-fpp-your-toppadel',y:2026,name:'Open Your Top-padel Industrial',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-30',dateEnd:'2026-11-01',draw:'2026-10-30',fpp:true},
@@ -416,7 +419,7 @@ const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-gold-ponta-delgada-04032026',y:2026,name:'FIP Gold Ponta Delgada',city:'Açores',country:'POR',tier:'gold',pts:300,dateStart:'2026-03-04',dateEnd:'2026-03-08',qual:'2026-03-04',draw:'2026-03-04',fpp:true},
 {id:'26t-fip-bronze-burriana-04032026',y:2026,name:'FIP Bronze Burriana',city:'Burriana',country:'ESP',tier:'bronze',pts:60,dateStart:'2026-03-04',dateEnd:'2026-03-08',qual:null,draw:'2026-03-04',fpp:false},
 {id:'26t-fip-bronze-singapore-04032026',y:2026,name:'FIP Bronze Singapore',city:'Singapore',country:'SGP',tier:'bronze',pts:60,dateStart:'2026-03-04',dateEnd:'2026-03-08',qual:null,draw:'2026-03-04',fpp:false},
-{id:'26t-fip-bronze-ga-cho-06032026',y:2026,name:'FIP Bronze Gaúcho',city:'Santa maria',country:'BRA',tier:'bronze',pts:60,dateStart:'2026-03-06',dateEnd:'2026-03-08',qual:null,draw:'2026-03-06',fpp:false},
+{id:'26t-fip-bronze-ga-cho-06032026',y:2026,name:'FIP Bronze Gaucho',city:'Santa maria',country:'BRA',tier:'bronze',pts:60,dateStart:'2026-03-06',dateEnd:'2026-03-08',qual:null,draw:'2026-03-06',fpp:false},
 {id:'26t-fip-bronze-siracusa-11032026',y:2026,name:'FIP Bronze Siracusa',city:'Siracusa',country:'ITA',tier:'bronze',pts:60,dateStart:'2026-03-11',dateEnd:'2026-03-15',qual:null,draw:'2026-03-11',fpp:false},
 {id:'26t-fip-silver-manila-12032026',y:2026,name:'FIP Silver Manila',city:'Manila',country:'PHI',tier:'silver',pts:150,dateStart:'2026-03-12',dateEnd:'2026-03-15',qual:null,draw:'2026-03-12',fpp:false},
 {id:'26t-fip-silver-joinville-12032026',y:2026,name:'FIP Silver Joinville',city:'Joinville',country:'BRA',tier:'silver',pts:150,dateStart:'2026-03-12',dateEnd:'2026-03-15',qual:null,draw:'2026-03-12',fpp:false},
@@ -445,7 +448,7 @@ const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-bronze-ic-nico-sports-15042026',y:2026,name:'FIP Bronze Icónico Sports',city:'Sevilla',country:'ESP',tier:'bronze',pts:60,dateStart:'2026-04-15',dateEnd:'2026-04-19',qual:null,draw:'2026-04-15',fpp:false},
 {id:'26t-fip-bronze-cyprus-i-16042026',y:2026,name:'FIP Bronze Cyprus I',city:'Ayia Napa',country:'CYP',tier:'bronze',pts:60,dateStart:'2026-04-16',dateEnd:'2026-04-19',qual:null,draw:'2026-04-16',fpp:false},
 {id:'26t-fip-bronze-marrakech-16042026',y:2026,name:'FIP Bronze Marrakech',city:'Marrakech',country:'MAR',tier:'bronze',pts:60,dateStart:'2026-04-16',dateEnd:'2026-04-19',qual:null,draw:'2026-04-16',fpp:false},
-{id:'26t-fip-bronze-iju-17042026',y:2026,name:'FIP Bronze Ijuí',city:'Ijuí',country:'BRA',tier:'bronze',pts:60,dateStart:'2026-04-17',dateEnd:'2026-04-19',qual:null,draw:'2026-04-17',fpp:false},
+{id:'26t-fip-bronze-iju-17042026',y:2026,name:'FIP Bronze Ijui',city:'Ijuí',country:'BRA',tier:'bronze',pts:60,dateStart:'2026-04-17',dateEnd:'2026-04-19',qual:null,draw:'2026-04-17',fpp:false},
 {id:'26t-fip-silver-kuala-lumpur-21042026',y:2026,name:'FIP Silver Kuala Lumpur',city:'Kuala lumpur',country:'MAS',tier:'silver',pts:150,dateStart:'2026-04-21',dateEnd:'2026-04-26',qual:null,draw:'2026-04-21',fpp:false},
 {id:'26t-fip-silver-mediolanum-padel-cup-bari-22042026',y:2026,name:'FIP Silver Mediolanum Padel Cup Bari',city:'Bari',country:'ITA',tier:'silver',pts:150,dateStart:'2026-04-22',dateEnd:'2026-04-26',qual:null,draw:'2026-04-22',fpp:false},
 {id:'26t-fip-bronze-cyprus-ii-23042026',y:2026,name:'FIP Bronze Cyprus Ii',city:'Ayia Napa',country:'CYP',tier:'bronze',pts:60,dateStart:'2026-04-23',dateEnd:'2026-04-26',qual:null,draw:'2026-04-23',fpp:false},
@@ -505,7 +508,7 @@ const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-bronze-astorga-22062026',y:2026,name:'FIP Bronze Astorga',city:'Astorga',country:'ESP',tier:'bronze',pts:60,dateStart:'2026-06-22',dateEnd:'2026-06-28',qual:null,draw:'2026-06-22',fpp:false},
 {id:'26t-fip-bronze-chieti-29062026',y:2026,name:'FIP Bronze Chieti',city:'Chieti',country:'ITA',tier:'bronze',pts:60,dateStart:'2026-06-29',dateEnd:'2026-07-05',qual:null,draw:'2026-06-29',fpp:false},
 {id:'26t-fip-bronze-baku-ii-29062026',y:2026,name:'FIP Bronze Baku Ii',city:'Baku',country:'AZE',tier:'bronze',pts:60,dateStart:'2026-06-29',dateEnd:'2026-07-05',qual:null,draw:'2026-06-29',fpp:false},
-{id:'26t-fip-bronze-la-nuc-a-29062026',y:2026,name:'FIP Bronze La Nucía',city:'La Nucia',country:'ESP',tier:'bronze',pts:60,dateStart:'2026-06-29',dateEnd:'2026-07-05',qual:null,draw:'2026-06-29',fpp:false},
+{id:'26t-fip-bronze-la-nuc-a-29062026',y:2026,name:'FIP Bronze La Nucia',city:'La Nucia',country:'ESP',tier:'bronze',pts:60,dateStart:'2026-06-29',dateEnd:'2026-07-05',qual:null,draw:'2026-06-29',fpp:false},
 {id:'26t-fip-silver-r3-bull-padel-cup-29062026',y:2026,name:'FIP Silver R3 Bull Padel Cup',city:'Belfast',country:'IRL',tier:'silver',pts:150,dateStart:'2026-06-29',dateEnd:'2026-07-05',qual:null,draw:'2026-06-29',fpp:false},
 {id:'26t-fip-bronze-hungary-06072026',y:2026,name:'FIP Bronze Hungary',city:'Budapest',country:'HUN',tier:'bronze',pts:60,dateStart:'2026-07-06',dateEnd:'2026-07-12',qual:null,draw:'2026-07-06',fpp:false},
 {id:'26t-fip-bronze-georgia-06072026',y:2026,name:'FIP Bronze Georgia',city:'Tbc',country:'GEO',tier:'bronze',pts:60,dateStart:'2026-07-06',dateEnd:'2026-07-12',qual:null,draw:'2026-07-06',fpp:false},
@@ -524,7 +527,7 @@ const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-bronze-san-juan-de-alicante---el-sal-20072026',y:2026,name:'FIP Bronze San Juan De Alicante – El Salt',city:'Comunidad valenciana',country:'ESP',tier:'bronze',pts:60,dateStart:'2026-07-20',dateEnd:'2026-07-26',qual:null,draw:'2026-07-20',fpp:false},
 {id:'26t-fip-bronze-hub-4-0-rovato-20072026',y:2026,name:'FIP Bronze Hub 4.0 Rovato',city:'Brescia',country:'ITA',tier:'bronze',pts:60,dateStart:'2026-07-20',dateEnd:'2026-07-26',qual:null,draw:'2026-07-20',fpp:false},
 {id:'26t-fip-bronze-allesvoorpadel-20072026',y:2026,name:'FIP Bronze Allesvoorpadel',city:'Lelystad',country:'NED',tier:'bronze',pts:60,dateStart:'2026-07-20',dateEnd:'2026-07-26',qual:null,draw:'2026-07-20',fpp:false},
-{id:'26t-fip-silver-slam-collbat-27072026',y:2026,name:'FIP Silver Slam Collbató',city:'Barcelona',country:'ESP',tier:'silver',pts:150,dateStart:'2026-07-27',dateEnd:'2026-08-02',qual:null,draw:'2026-07-27',fpp:false},
+{id:'26t-fip-silver-slam-collbat-27072026',y:2026,name:'FIP Silver Slam Collbato',city:'Barcelona',country:'ESP',tier:'silver',pts:150,dateStart:'2026-07-27',dateEnd:'2026-08-02',qual:null,draw:'2026-07-27',fpp:false},
 {id:'26t-fip-bronze-egypt-iv-27072026',y:2026,name:'FIP Bronze Egypt Iv',city:'Tbc',country:'EGY',tier:'bronze',pts:60,dateStart:'2026-07-27',dateEnd:'2026-08-02',qual:null,draw:'2026-07-27',fpp:false},
 {id:'26t-fip-bronze-venezuela-27072026',y:2026,name:'FIP Bronze Venezuela',city:'Caracas',country:'VEN',tier:'bronze',pts:60,dateStart:'2026-07-27',dateEnd:'2026-08-02',qual:null,draw:'2026-07-27',fpp:false},
 {id:'26t-fip-silver-rathbones-island-padel-27072026',y:2026,name:'FIP Silver Rathbones Island Padel',city:'Jersey Island',country:'GBR',tier:'silver',pts:150,dateStart:'2026-07-27',dateEnd:'2026-08-02',qual:null,draw:'2026-07-27',fpp:false},
@@ -537,7 +540,7 @@ const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-silver-indonesia-10082026',y:2026,name:'FIP Silver Indonesia',city:'Tbd',country:'INA',tier:'silver',pts:150,dateStart:'2026-08-10',dateEnd:'2026-08-16',qual:null,draw:'2026-08-10',fpp:false},
 {id:'26t-fip-gold-puerto-cabello-10082026',y:2026,name:'FIP Gold Puerto Cabello',city:'Puerto Cabello',country:'VEN',tier:'gold',pts:300,dateStart:'2026-08-10',dateEnd:'2026-08-16',qual:'2026-08-10',draw:'2026-08-10',fpp:false},
 {id:'26t-fip-bronze-chile-vi-17082026',y:2026,name:'FIP Bronze Chile Vi',city:'Castro',country:'CHI',tier:'bronze',pts:60,dateStart:'2026-08-17',dateEnd:'2026-08-23',qual:null,draw:'2026-08-17',fpp:false},
-{id:'26t-fip-silver-porto-st-elpidio-17082026',y:2026,name:'FIP Silver Porto St`Elpidio',city:'Porto Sant`Elpidio',country:'ITA',tier:'silver',pts:150,dateStart:'2026-08-17',dateEnd:'2026-08-24',qual:null,draw:'2026-08-17',fpp:false},
+{id:'26t-fip-silver-porto-st-elpidio-17082026',y:2026,name:'FIP Silver Porto StElpidio',city:'Porto Sant`Elpidio',country:'ITA',tier:'silver',pts:150,dateStart:'2026-08-17',dateEnd:'2026-08-24',qual:null,draw:'2026-08-17',fpp:false},
 {id:'26t-fip-gold-san-luis-17082026',y:2026,name:'FIP Gold San Luis',city:'San luis',country:'MEX',tier:'gold',pts:300,dateStart:'2026-08-17',dateEnd:'2026-08-23',qual:'2026-08-17',draw:'2026-08-17',fpp:false},
 {id:'26t-fip-silver-esc-padel-ii-17082026',y:2026,name:'FIP Silver Esc Padel Ii',city:'Espoo',country:'FIN',tier:'silver',pts:150,dateStart:'2026-08-17',dateEnd:'2026-08-22',qual:null,draw:'2026-08-17',fpp:false},
 {id:'26t-fip-silver-mcallen-texas-24082026',y:2026,name:'FIP Silver Mcallen Texas',city:'Mcallen texas',country:'USA',tier:'silver',pts:150,dateStart:'2026-08-24',dateEnd:'2026-08-30',qual:null,draw:'2026-08-24',fpp:false},
@@ -653,16 +656,27 @@ let activeWeekMonday=null; // null = all weeks
 
 // STORAGE
 async function loadFromStorage(){
-  try{const r=await window.storage.get('pepi_v5_data');if(r&&r.value){const d=JSON.parse(r.value);userData=d.userData||{};userTournaments=d.userTournaments||[];}}catch(e){loadLocal();}
+  try{
+    if(typeof window.storage!=='undefined'){
+      const r=await window.storage.get('pepi_v5_data');
+      if(r&&r.value){const d=JSON.parse(r.value);userData=d.userData||{};userTournaments=d.userTournaments||[];}
+      else{loadLocal();}
+    } else {loadLocal();}
+  }catch(e){loadLocal();}
   setSyncStatus('synced','Sincronizado');
   rebuildList();renderStats();renderList();
 }
 async function saveToStorage(){
   setSyncStatus('syncing','A sincronizar...');
-  try{await window.storage.set('pepi_v5_data',JSON.stringify({userData,userTournaments,savedAt:new Date().toISOString()}));setSyncStatus('synced','Sincronizado — '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}));saveLocal();}
-  catch(e){setSyncStatus('error','Erro sync');saveLocal();}
+  try{
+    if(typeof window.storage!=='undefined'){
+      await window.storage.set('pepi_v5_data',JSON.stringify({userData,userTournaments,savedAt:new Date().toISOString()}));
+      setSyncStatus('synced','Sincronizado — '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}));
+    } else {setSyncStatus('synced','Guardado localmente');}
+    saveLocal();
+  }catch(e){setSyncStatus('error','Erro sync');saveLocal();}
 }
-function loadLocal(){try{const d=JSON.parse(localStorage.getItem('pepi_v5_data')||'{}');userData=d.userData||{};userTournaments=d.userTournaments||[];}catch(e){}};userData=d.userData||{};userTournaments=d.userTournaments||{};}catch(e){}}
+function loadLocal(){try{const d=JSON.parse(localStorage.getItem('pepi_v5_data')||'{}');userData=d.userData||{};userTournaments=d.userTournaments||[];}catch(e){}}
 function saveLocal(){try{localStorage.setItem('pepi_v5_data',JSON.stringify({userData,userTournaments}));}catch(e){}}
 function setSyncStatus(s,m){document.getElementById('syncDot').className='sync-dot '+s;document.getElementById('syncLabel').textContent=m;}
 function getU(id){return userData[id]||{};}
@@ -831,6 +845,60 @@ function confirmDelete(){if(!deleteTargetId){closeConfirm();return;}const id=del
 // REFRESH / SYNC
 async function doRefresh(){const btn=document.getElementById('btnRefresh');btn.classList.add('spinning');btn.disabled=true;toast('🔄 A atualizar...');await new Promise(r=>setTimeout(r,1200));rebuildList();renderStats();renderList();btn.classList.remove('spinning');btn.disabled=false;toast('✓ Calendário atualizado — '+new Date().toLocaleDateString('pt-PT'));}
 async function doSync(){setSyncStatus('syncing','A sincronizar...');toast('🔄 A sincronizar...');await saveToStorage();toast('✓ Sincronizado');}
+
+// EXCEL EXPORT
+function exportExcel(){
+  const list = filteredList();
+  if(!list.length){toast('Nenhum torneio para exportar');return;}
+  
+  const rows = [
+    ['Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','FPP','Notas']
+  ];
+  
+  list.forEach(t => {
+    const u = getU(t.id);
+    const tierLabels = {major:'Major',p1:'P1',p2:'P2',platinum:'Platinum',gold:'Gold',silver:'Silver',bronze:'Bronze',fpp:'FPP',nat:'Nacional FPP',champ:'Campeonato'};
+    rows.push([
+      t.name,
+      t.city,
+      t.country,
+      tierLabels[t.tier] || t.tier,
+      t.pts || '',
+      t.dateStart,
+      t.dateEnd,
+      t.qual || '',
+      t.draw || t.dateStart,
+      u.status === 'confirmado' ? 'Confirmado' : u.status === 'tentativo' ? 'Tentativo' : u.status === 'nao-vou' ? 'Não vou' : '',
+      u.partner || '',
+      t.fpp ? 'Sim' : '',
+      u.notes || ''
+    ]);
+  });
+
+  // Build CSV with BOM for Excel UTF-8
+  const bom = '\uFEFF';
+  const csv = bom + rows.map(r => 
+    r.map(cell => {
+      const s = String(cell === null || cell === undefined ? '' : cell);
+      return s.includes(',') || s.includes('"') || s.includes('\n') 
+        ? '"' + s.replace(/"/g, '""') + '"' 
+        : s;
+    }).join(';')  // semicolon for European Excel
+  ).join('\r\n');
+
+  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const filterName = activeFilter === 'all' ? 'todos' : activeFilter;
+  const weekStr = activeWeekMonday ? '-semana' : '';
+  a.href = url;
+  a.download = 'pepi-circuit-' + activeYear + '-' + filterName + weekStr + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('✓ Excel exportado — ' + list.length + ' torneios');
+}
 
 // TOAST
 let toastT;
