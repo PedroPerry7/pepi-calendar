@@ -74,7 +74,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .search-icon{position:absolute;left:22px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
 .content{padding:8px 10px calc(var(--safe-bottom) + 80px)}
 .month-group{margin-bottom:4px}
-.month-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--muted);padding:12px 4px 5px;position:sticky;top:calc(var(--safe-top) + 180px);background:var(--bg);z-index:10}
+.month-label{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted);padding:12px 4px 5px;position:sticky;top:calc(var(--safe-top) + 180px);background:var(--bg);z-index:10;display:flex;align-items:center;gap:8px}
+.month-label .wk-range{color:var(--muted2)}
+.month-label .wk-count{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);font-weight:normal;letter-spacing:0}
 .t-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;margin-bottom:6px;overflow:hidden;transition:border-color 0.2s}
 .t-card.is-starred{border-color:rgba(228,192,96,0.35)}
 .t-card.is-past{opacity:0.32}
@@ -730,16 +732,81 @@ function renderStats(){
   document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div>`;
 }
 
+// Relevance order for sorting within a week
+const TIER_RANK={champ:1,nat:2,p1:3,major:4,p2:5,platinum:6,gold:7,silver:8,bronze:9,fpp:10};
+function tierRank(t){
+  // champ = world/euro championships (tier=champ)
+  // nat = campeonato nacional absolutos FPP
+  // Special: FIP Masters Finals / Premier Finals (name contains Finals)
+  if(t.tier==='champ') return 1;
+  if(t.tier==='nat') return 2;
+  if(t.name.toLowerCase().includes('finals')) return 3;
+  if(t.tier==='major') return 4;
+  if(t.tier==='p1') return 5;
+  if(t.tier==='p2') return 6;
+  if(t.tier==='platinum') return 7;
+  if(t.tier==='gold') return 8;
+  if(t.tier==='silver') return 9;
+  if(t.tier==='bronze') return 10;
+  // FPP: sort by prize money descending (higher pts = more important)
+  // We use pts field; FPP tournaments with higher prize = lower rank number
+  if(t.tier==='fpp'){
+    // Map prize to rank: 50000->11, 25000->12, 18000->13, 10000->14, 5000->15, 2000->16, 0->17
+    const pm = t.pts || 0;
+    if(pm>=50000) return 11;
+    if(pm>=25000) return 12;
+    if(pm>=18000) return 13;
+    if(pm>=10000) return 14;
+    if(pm>=5000)  return 15;
+    if(pm>=2000)  return 16;
+    return 17;
+  }
+  return 18;
+}
+
+function getWeekKey(dateEnd){
+  // Week is determined by the Monday of the week the end date falls in
+  const mon = getMonday(new Date(dateEnd+'T12:00:00'));
+  return mon.toISOString().slice(0,10);
+}
+
+function fmtWeekGroup(weekKey){
+  const mon = new Date(weekKey+'T12:00:00');
+  const sun = addDays(mon,6);
+  const sameMon = mon.getMonth()===sun.getMonth();
+  if(sameMon){
+    return `${mon.getDate()}–${sun.getDate()} ${MONTHS[mon.getMonth()].toUpperCase()} ${mon.getFullYear()}`;
+  }
+  return `${mon.getDate()} ${MONTHS[mon.getMonth()].toUpperCase()} – ${sun.getDate()} ${MONTHS[sun.getMonth()].toUpperCase()} ${sun.getFullYear()}`;
+}
+
 function renderList(){
   const list=filteredList();
   const el=document.getElementById('mainContent');
   if(!list.length){el.innerHTML='<div class="empty"><big>🎾</big>Nenhum torneio encontrado</div>';return;}
-  const byMonth={};
-  list.forEach(t=>{const m=getMonthIdx(t.dateStart);if(!byMonth[m])byMonth[m]=[];byMonth[m].push(t);});
+  
+  // Group by week of end date
+  const byWeek={};
+  list.forEach(t=>{
+    const wk=getWeekKey(t.dateEnd);
+    if(!byWeek[wk])byWeek[wk]=[];
+    byWeek[wk].push(t);
+  });
+  
+  // Sort within each week by relevance, then by dateStart
+  Object.keys(byWeek).forEach(wk=>{
+    byWeek[wk].sort((a,b)=>{
+      const ra=tierRank(a), rb=tierRank(b);
+      if(ra!==rb) return ra-rb;
+      return a.dateStart.localeCompare(b.dateStart);
+    });
+  });
+  
   let html='';
-  Object.keys(byMonth).sort((a,b)=>+a-+b).forEach(mk=>{
-    html+=`<div class="month-group"><div class="month-label">${MONTHSF[mk].toUpperCase()}</div>`;
-    byMonth[mk].forEach(t=>{html+=renderCard(t);});
+  Object.keys(byWeek).sort().forEach(wk=>{
+    const items=byWeek[wk];
+    html+=`<div class="month-group"><div class="month-label"><span class="wk-range">${fmtWeekGroup(wk)}</span><span class="wk-count">${items.length} torneio${items.length!==1?'s':''}</span></div>`;
+    items.forEach(t=>{html+=renderCard(t);});
     html+='</div>';
   });
   el.innerHTML=html;
