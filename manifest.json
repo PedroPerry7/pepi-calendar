@@ -1,0 +1,18 @@
+{
+  "name": "Pepi Circuit 2025-2026",
+  "short_name": "Pepi 25-26",
+  "description": "Calendário FIP + FPP do Pedro Perry",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

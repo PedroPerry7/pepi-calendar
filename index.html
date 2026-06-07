@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pepi 25-26">
+<meta name="theme-color" content="#0a0e1a">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>Pepi — Circuit 2025·2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0e1a; --bg2:#111625; --bg3:#1a2035; --bg4:#202840;
+  --border:rgba(255,255,255,0.07); --border2:rgba(255,255,255,0.13); --border3:rgba(255,255,255,0.22);
+  --gold:#e4c060; --gold2:#f0d080;
+  --text:#e8eaf0; --muted:#6a7290; --muted2:#8a94b0;
+  --major:#e85d75; --p1:#e87d3a; --p2:#e8b53a;
+  --platinum:#7ecfff; --gold-t:#4ec4a0; --silver:#90a0c0; --bronze:#c07840;
+  --fpp:#a07af0; --nat:#60b87a; --champ:#e060c0;
+  --safe-top:env(safe-area-inset-top,0px); --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100svh;overscroll-behavior:none}
+
+/* ── HEADER ── */
+.app-header{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:calc(var(--safe-top) + 10px) 14px 10px}
+.header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--gold);line-height:1}
+.logo span{color:var(--muted2);font-size:12px;font-family:'DM Mono',monospace;display:block;letter-spacing:1px;margin-top:1px}
+.header-actions{display:flex;gap:8px;align-items:center}
+.btn-icon{background:var(--bg3);border:1px solid var(--border2);color:var(--text);width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;flex-shrink:0}
+.btn-icon:active{transform:scale(0.93);background:var(--bg4)}
+.btn-icon svg{width:16px;height:16px}
+.btn-refresh.spinning svg{animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── YEAR TABS ── */
+.year-tabs{display:flex;gap:6px;margin-bottom:10px}
+.year-tab{flex:1;padding:6px 0;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:12px;cursor:pointer;transition:all 0.15s;text-align:center}
+.year-tab.active{background:var(--gold);color:#000;border-color:var(--gold);font-weight:500}
+
+/* ── FILTERS ── */
+.filters{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.filters::-webkit-scrollbar{display:none}
+.filter-btn{flex-shrink:0;padding:5px 10px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted2);font-family:'DM Mono',monospace;font-size:10px;cursor:pointer;transition:all 0.15s;white-space:nowrap}
+.filter-btn.active{color:#000;border-color:transparent;font-weight:500}
+.filter-btn[data-f="all"].active{background:var(--gold);color:#000}
+.filter-btn[data-f="starred"].active{background:#e85d75}
+.filter-btn[data-f="major"].active{background:var(--major)}
+.filter-btn[data-f="p1"].active{background:var(--p1)}
+.filter-btn[data-f="p2"].active{background:var(--p2);color:#000}
+.filter-btn[data-f="platinum"].active{background:var(--platinum);color:#000}
+.filter-btn[data-f="gold"].active{background:var(--gold-t);color:#000}
+.filter-btn[data-f="silver"].active{background:var(--silver);color:#000}
+.filter-btn[data-f="bronze"].active{background:var(--bronze)}
+.filter-btn[data-f="fpp"].active{background:var(--fpp)}
+.filter-btn[data-f="nat"].active{background:var(--nat);color:#000}
+.filter-btn[data-f="por"].active{background:#c84040}
+.filter-btn[data-f="confirmado"].active{background:var(--gold-t);color:#000}
+
+/* ── STATS ── */
+.stats-bar{display:flex;gap:0;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.stats-bar::-webkit-scrollbar{display:none}
+.stat{flex-shrink:0;text-align:center;padding:8px 14px;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Bebas Neue',sans-serif;font-size:20px;line-height:1;color:var(--gold)}
+.stat-l{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:1px}
+
+/* ── SEARCH ── */
+.search-wrap{padding:10px 12px 0;position:relative}
+.search-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:9px 14px 9px 36px;outline:none;transition:border-color 0.15s}
+.search-input:focus{border-color:var(--gold)}
+.search-icon{position:absolute;left:24px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+
+/* ── CONTENT ── */
+.content{padding:10px 10px calc(var(--safe-bottom) + 80px)}
+.month-group{margin-bottom:4px}
+.month-label{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:var(--muted);padding:14px 4px 6px;position:sticky;top:calc(var(--safe-top) + 158px);background:var(--bg);z-index:10}
+
+/* ── CARD ── */
+.t-card{background:var(--bg2);border:1px solid var(--border);border-radius:11px;margin-bottom:7px;overflow:hidden;transition:border-color 0.2s}
+.t-card.is-starred{border-color:rgba(228,192,96,0.35)}
+.t-card.is-past{opacity:0.38}
+.t-card.is-custom{border-style:dashed}
+
+.t-main{display:flex;align-items:stretch;cursor:pointer;padding:11px 12px;gap:10px;position:relative}
+.t-stripe{width:3px;border-radius:2px;flex-shrink:0;align-self:stretch;margin:-11px 0 -11px -12px}
+
+.t-date-col{flex-shrink:0;text-align:center;min-width:38px}
+.t-day{font-family:'Bebas Neue',sans-serif;font-size:26px;line-height:1}
+.t-mon{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+
+.t-info{flex:1;min-width:0}
+.t-name{font-weight:500;font-size:13px;line-height:1.3;margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t-loc{font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:3px;margin-bottom:4px}
+.t-badges{display:flex;gap:4px;flex-wrap:wrap}
+.badge{font-family:'DM Mono',monospace;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:500;white-space:nowrap}
+.badge-major{background:rgba(232,93,117,0.18);color:var(--major)}
+.badge-p1{background:rgba(232,125,58,0.18);color:var(--p1)}
+.badge-p2{background:rgba(232,181,58,0.18);color:var(--p2)}
+.badge-platinum{background:rgba(126,207,255,0.13);color:var(--platinum)}
+.badge-gold{background:rgba(78,196,160,0.13);color:var(--gold-t)}
+.badge-silver{background:rgba(144,160,192,0.13);color:var(--silver)}
+.badge-bronze{background:rgba(192,120,64,0.18);color:var(--bronze)}
+.badge-fpp{background:rgba(160,122,240,0.18);color:var(--fpp)}
+.badge-nat{background:rgba(96,184,122,0.15);color:var(--nat)}
+.badge-champ{background:rgba(224,96,192,0.15);color:var(--champ)}
+.badge-pts{background:rgba(228,192,96,0.1);color:var(--gold)}
+.badge-go{background:rgba(78,196,160,0.18);color:var(--gold-t)}
+.badge-maybe{background:rgba(232,181,58,0.15);color:var(--p2)}
+.badge-no{background:rgba(106,114,144,0.15);color:var(--muted2)}
+.badge-partner{background:rgba(228,192,96,0.08);color:var(--gold);border:1px solid rgba(228,192,96,0.2)}
+.badge-por{background:rgba(200,64,64,0.18);color:#e07070}
+.badge-custom{background:rgba(160,122,240,0.1);color:var(--fpp);border:1px dashed rgba(160,122,240,0.3)}
+
+.t-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:4px}
+.star-btn{background:none;border:none;cursor:pointer;padding:2px;color:var(--muted);font-size:17px;line-height:1;transition:color 0.15s,transform 0.15s}
+.star-btn.on{color:var(--gold)}
+.star-btn:active{transform:scale(1.3)}
+.t-daterange{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-align:right;line-height:1.5}
+
+/* ── EXPANDED ── */
+.t-expanded{display:none;border-top:1px solid var(--border);background:var(--bg3);padding:12px}
+.t-card.open .t-expanded{display:block}
+.t-card.open .t-main{background:rgba(255,255,255,0.015)}
+
+.exp-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:10px}
+.exp-field label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px}
+.exp-select,.exp-input{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 9px;outline:none;-webkit-appearance:none;transition:border-color 0.15s}
+.exp-select:focus,.exp-input:focus{border-color:var(--gold)}
+.exp-select option{background:var(--bg2)}
+
+.dates-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+.date-pill{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:6px 8px}
+.date-pill.qual{border-color:rgba(126,207,255,0.25)}
+.date-pill.qual .dp-lbl{color:var(--platinum)}
+.date-pill.draw{border-color:rgba(232,181,58,0.25)}
+.date-pill.draw .dp-lbl{color:var(--p2)}
+.dp-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);margin-bottom:2px}
+.dp-val{font-size:12px;font-weight:500}
+
+.exp-notes{width:100%;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 9px;outline:none;resize:none;min-height:50px;transition:border-color 0.15s;margin-top:4px}
+.exp-notes:focus{border-color:var(--gold)}
+.exp-notes::placeholder{color:var(--muted)}
+
+.exp-actions{display:flex;gap:7px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
+.btn-edit,.btn-del{flex:1;padding:8px 0;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.btn-edit:active{background:var(--bg4)}
+.btn-del{color:#e07070;border-color:rgba(224,112,112,0.25)}
+.btn-del:active{background:rgba(224,112,112,0.1)}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:calc(var(--safe-bottom) + 20px);right:16px;width:52px;height:52px;border-radius:50%;background:var(--gold);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(228,192,96,0.35);z-index:50;transition:transform 0.15s}
+.fab:active{transform:scale(0.92)}
+.fab svg{width:22px;height:22px;color:#000}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.modal-overlay.show{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border-radius:16px 16px 0 0;padding:20px 16px calc(var(--safe-bottom) + 20px);width:100%;max-height:92svh;overflow-y:auto;transform:translateY(40px);transition:transform 0.25s cubic-bezier(0.34,1.2,0.64,1)}
+.modal-overlay.show .modal{transform:translateY(0)}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+.modal-close{background:none;border:none;color:var(--muted2);cursor:pointer;font-size:20px;padding:2px;line-height:1}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.modal-field{margin-bottom:0}
+.modal-field.full{grid-column:1/-1}
+.modal-field label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:4px}
+.modal-input,.modal-select{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 11px;outline:none;-webkit-appearance:none;transition:border-color 0.15s}
+.modal-input:focus,.modal-select:focus{border-color:var(--gold)}
+.modal-select option{background:var(--bg3)}
+.btn-save{width:100%;padding:13px;background:var(--gold);border:none;border-radius:10px;color:#000;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;margin-top:12px;transition:opacity 0.15s}
+.btn-save:active{opacity:0.85}
+
+/* ── SYNC INDICATOR ── */
+.sync-row{display:flex;align-items:center;gap:6px;padding:6px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:10px;color:var(--muted)}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0}
+.sync-dot.synced{background:var(--gold-t)}
+.sync-dot.syncing{background:var(--p2);animation:pulse 1s infinite}
+.sync-dot.error{background:var(--major)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:calc(var(--safe-bottom) + 80px);left:50%;transform:translateX(-50%) translateY(60px);background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px 16px;border-radius:20px;font-size:12px;font-family:'DM Mono',monospace;transition:transform 0.28s cubic-bezier(0.34,1.3,0.64,1);z-index:300;white-space:nowrap;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ── EMPTY ── */
+.empty{text-align:center;padding:50px 20px;color:var(--muted)}
+.empty big{font-family:'Bebas Neue',sans-serif;font-size:36px;display:block;margin-bottom:6px;color:var(--border2)}
+
+/* ── CONFIRM ── */
+.confirm-box{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:400;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.15s}
+.confirm-box.show{opacity:1;pointer-events:all}
+.confirm-inner{background:var(--bg2);border:1px solid var(--border2);border-radius:14px;padding:20px;max-width:300px;width:100%;text-align:center}
+.confirm-inner p{font-size:14px;color:var(--text);margin-bottom:16px;line-height:1.5}
+.confirm-btns{display:flex;gap:8px}
+.confirm-btns button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
+.confirm-btns .btn-confirm-del{background:rgba(200,64,64,0.2);color:#e07070;border-color:rgba(200,64,64,0.3)}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-top">
+    <div class="logo">PEPI<span>CIRCUIT 2025 · 2026</span></div>
+    <div class="header-actions">
+      <button class="btn-icon btn-refresh" id="btnRefresh" title="Atualizar" onclick="doRefresh()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      </button>
+      <button class="btn-icon" title="Sincronizar" onclick="doSync()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2z"/><path d="M2 12h4M18 12h4M12 2v4M12 18v4"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="year-tabs">
+    <button class="year-tab" data-y="2025" onclick="setYear(2025,this)">2025</button>
+    <button class="year-tab active" data-y="2026" onclick="setYear(2026,this)">2026</button>
+  </div>
+  <div class="filters" id="filtersBar">
+    <button class="filter-btn active" data-f="all" onclick="setFilter('all',this)">Todos</button>
+    <button class="filter-btn" data-f="starred" onclick="setFilter('starred',this)">⭐ Meus</button>
+    <button class="filter-btn" data-f="confirmado" onclick="setFilter('confirmado',this)">✓ Go</button>
+    <button class="filter-btn" data-f="por" onclick="setFilter('por',this)">🇵🇹 Portugal</button>
+    <button class="filter-btn" data-f="major" onclick="setFilter('major',this)">Major</button>
+    <button class="filter-btn" data-f="p1" onclick="setFilter('p1',this)">P1</button>
+    <button class="filter-btn" data-f="p2" onclick="setFilter('p2',this)">P2</button>
+    <button class="filter-btn" data-f="platinum" onclick="setFilter('platinum',this)">Platinum</button>
+    <button class="filter-btn" data-f="gold" onclick="setFilter('gold',this)">Gold</button>
+    <button class="filter-btn" data-f="silver" onclick="setFilter('silver',this)">Silver</button>
+    <button class="filter-btn" data-f="bronze" onclick="setFilter('bronze',this)">Bronze</button>
+    <button class="filter-btn" data-f="fpp" onclick="setFilter('fpp',this)">FPP</button>
+    <button class="filter-btn" data-f="nat" onclick="setFilter('nat',this)">Nac.</button>
+  </div>
+</header>
+
+<div class="sync-row">
+  <div class="sync-dot" id="syncDot"></div>
+  <span id="syncLabel">A carregar dados...</span>
+</div>
+<div class="stats-bar" id="statsBar"></div>
+<div class="search-wrap">
+  <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <input class="search-input" type="search" id="searchInput" placeholder="Pesquisar torneio, cidade, país..." oninput="renderList()">
+</div>
+<div class="content" id="mainContent"></div>
+
+<button class="fab" onclick="openAddModal()" title="Adicionar torneio">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+</button>
+
+<!-- ADD/EDIT MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-title">
+      <span id="modalTitle">Adicionar Torneio</span>
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+    </div>
+    <div class="modal-grid">
+      <div class="modal-field full">
+        <label>Nome do Torneio</label>
+        <input class="modal-input" id="mName" type="text" placeholder="ex: FIP Gold Paredes">
+      </div>
+      <div class="modal-field">
+        <label>Cidade</label>
+        <input class="modal-input" id="mCity" type="text" placeholder="ex: Paredes">
+      </div>
+      <div class="modal-field">
+        <label>País (sigla)</label>
+        <input class="modal-input" id="mCountry" type="text" placeholder="ex: POR" maxlength="5">
+      </div>
+      <div class="modal-field">
+        <label>Categoria</label>
+        <select class="modal-select" id="mTier">
+          <option value="major">Major</option>
+          <option value="p1">P1</option>
+          <option value="p2">P2</option>
+          <option value="platinum">Platinum</option>
+          <option value="gold">Gold</option>
+          <option value="silver" selected>Silver</option>
+          <option value="bronze">Bronze</option>
+          <option value="fpp">FPP</option>
+          <option value="nat">Nacional FPP</option>
+          <option value="champ">Campeonato</option>
+        </select>
+      </div>
+      <div class="modal-field">
+        <label>Pontos FIP</label>
+        <input class="modal-input" id="mPts" type="number" placeholder="ex: 300" min="0">
+      </div>
+      <div class="modal-field">
+        <label>Início (AAAA-MM-DD)</label>
+        <input class="modal-input" id="mStart" type="date">
+      </div>
+      <div class="modal-field">
+        <label>Fim (AAAA-MM-DD)</label>
+        <input class="modal-input" id="mEnd" type="date">
+      </div>
+      <div class="modal-field">
+        <label>Qualifying (AAAA-MM-DD)</label>
+        <input class="modal-input" id="mQual" type="date" placeholder="Opcional">
+      </div>
+      <div class="modal-field">
+        <label>Quadro Principal</label>
+        <input class="modal-input" id="mDraw" type="date">
+      </div>
+      <div class="modal-field full">
+        <label>Parceiro</label>
+        <input class="modal-input" id="mPartner" type="text" placeholder="ex: Fazendeiro">
+      </div>
+      <div class="modal-field full">
+        <label>Estado</label>
+        <select class="modal-select" id="mStatus">
+          <option value="">— a decidir —</option>
+          <option value="confirmado">✓ Confirmado</option>
+          <option value="tentativo">? Tentativo</option>
+          <option value="nao-vou">✗ Não vou</option>
+        </select>
+      </div>
+      <div class="modal-field full">
+        <label>Notas</label>
+        <input class="modal-input" id="mNotes" type="text" placeholder="Hotel, voo, contactos...">
+      </div>
+    </div>
+    <button class="btn-save" onclick="saveModal()">Guardar</button>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE -->
+<div class="confirm-box" id="confirmBox">
+  <div class="confirm-inner">
+    <p id="confirmMsg">Apagar este torneio?</p>
+    <div class="confirm-btns">
+      <button onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-confirm-del" onclick="confirmDelete()">Apagar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════
+//  STORAGE KEY
+// ═══════════════════════════════════════════════════
+const STORAGE_KEY = 'pepi_v4_data';
+const SYNC_KEY    = 'pepi_v4_sync';
+
+// ═══════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════
+const MONTHS  = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const MONTHSF = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const TIER_LABEL = {major:'MAJOR',p1:'P1',p2:'P2',platinum:'PLATINUM',gold:'GOLD',silver:'SILVER',bronze:'BRONZE',fpp:'FPP',nat:'NAC.',champ:'CHAMP'};
+const TIER_COL   = {major:'--major',p1:'--p1',p2:'--p2',platinum:'--platinum',gold:'--gold-t',silver:'--silver',bronze:'--bronze',fpp:'--fpp',nat:'--nat',champ:'--champ'};
+const POR_COUNTRIES = new Set(['POR','PT','Portugal','Madeira','Açores','Azores','Ponta Delgada','Paredes','Oeiras','Lisboa','Porto','Viseu','Leiria','Setúbal','Matosinhos','Guimarães','Ericeira','São João da Madeira','Almeirim','Portimão','Vila Real de Santo António']);
+
+function isPOR(t){ return t.country==='POR'||POR_COUNTRIES.has(t.country)||POR_COUNTRIES.has(t.city); }
+function fmt(ds){ if(!ds)return'—'; const d=new Date(ds+'T12:00:00'); return `${d.getDate()} ${MONTHS[d.getMonth()]}`; }
+function startDay(ds){ return new Date(ds+'T12:00:00').getDate(); }
+function startMon(ds){ return MONTHS[new Date(ds+'T12:00:00').getMonth()]; }
+function getMonthIdx(ds){ return new Date(ds+'T12:00:00').getMonth(); }
+function getYear(ds){ return new Date(ds+'T12:00:00').getFullYear(); }
+function isPast(t){ return new Date(t.dateEnd+'T23:59:59') < new Date(); }
+function uid(){ return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+// ═══════════════════════════════════════════════════
+//  BASE TOURNAMENT DATA
+// ═══════════════════════════════════════════════════
+const BASE = [
+// ─── 2025 PREMIER PADEL ──────────────────────────────────────────────────
+{id:'25-pp-riyadh',y:2025,name:'Premier Padel Riyadh Season P1',city:'Riade',country:'KSA',tier:'p1',pts:1000,dateStart:'2025-02-10',dateEnd:'2025-02-15',qual:'2025-02-10',draw:'2025-02-12'},
+{id:'25-pp-gijon',y:2025,name:'Premier Padel Gijón P2',city:'Gijón',country:'ESP',tier:'p2',pts:500,dateStart:'2025-02-24',dateEnd:'2025-03-02',qual:'2025-02-24',draw:'2025-02-26'},
+{id:'25-pp-cancun',y:2025,name:'Premier Padel Cancún P2',city:'Cancún',country:'MEX',tier:'p2',pts:500,dateStart:'2025-03-10',dateEnd:'2025-03-16',qual:'2025-03-10',draw:'2025-03-12'},
+{id:'25-pp-miami',y:2025,name:'Premier Padel Miami P1',city:'Miami',country:'USA',tier:'p1',pts:1000,dateStart:'2025-03-17',dateEnd:'2025-03-23',qual:'2025-03-17',draw:'2025-03-19'},
+{id:'25-pp-santiago',y:2025,name:'Premier Padel Santiago P1',city:'Santiago',country:'CHI',tier:'p1',pts:1000,dateStart:'2025-03-24',dateEnd:'2025-03-30',qual:'2025-03-24',draw:'2025-03-26'},
+{id:'25-pp-qatar',y:2025,name:'Premier Padel Qatar Major',city:'Doha',country:'QAT',tier:'major',pts:2000,dateStart:'2025-04-14',dateEnd:'2025-04-19',qual:'2025-04-14',draw:'2025-04-15'},
+{id:'25-pp-brussels',y:2025,name:'Premier Padel Brussels P2',city:'Bruxelas',country:'BEL',tier:'p2',pts:500,dateStart:'2025-04-21',dateEnd:'2025-04-27',qual:'2025-04-21',draw:'2025-04-23'},
+{id:'25-pp-asuncion',y:2025,name:'Premier Padel Asunción P2',city:'Assunção',country:'PAR',tier:'p2',pts:500,dateStart:'2025-05-19',dateEnd:'2025-05-25',qual:'2025-05-19',draw:'2025-05-21'},
+{id:'25-pp-baires',y:2025,name:'Premier Padel Buenos Aires P1',city:'Buenos Aires',country:'ARG',tier:'p1',pts:1000,dateStart:'2025-05-26',dateEnd:'2025-06-01',qual:'2025-05-26',draw:'2025-05-28'},
+{id:'25-pp-italy',y:2025,name:'Premier Padel Italy Major',city:'Roma',country:'ITA',tier:'major',pts:2000,dateStart:'2025-06-09',dateEnd:'2025-06-15',qual:'2025-06-09',draw:'2025-06-11'},
+{id:'25-pp-valladolid',y:2025,name:'Premier Padel Valladolid P2',city:'Valladolid',country:'ESP',tier:'p2',pts:500,dateStart:'2025-06-23',dateEnd:'2025-06-29',qual:'2025-06-23',draw:'2025-06-25'},
+{id:'25-pp-bordeaux',y:2025,name:'Premier Padel Bordeaux P2',city:'Bordéus',country:'FRA',tier:'p2',pts:500,dateStart:'2025-06-30',dateEnd:'2025-07-06',qual:'2025-06-30',draw:'2025-07-02'},
+{id:'25-pp-malaga',y:2025,name:'Premier Padel Málaga P1',city:'Málaga',country:'ESP',tier:'p1',pts:1000,dateStart:'2025-07-14',dateEnd:'2025-07-20',qual:'2025-07-14',draw:'2025-07-16'},
+{id:'25-pp-tarragona',y:2025,name:'Premier Padel Tarragona P1',city:'Tarragona',country:'ESP',tier:'p1',pts:1000,dateStart:'2025-07-28',dateEnd:'2025-08-03',qual:'2025-07-28',draw:'2025-07-30'},
+{id:'25-pp-madrid',y:2025,name:'Premier Padel Madrid P1',city:'Madrid',country:'ESP',tier:'p1',pts:1000,dateStart:'2025-09-01',dateEnd:'2025-09-07',qual:'2025-09-01',draw:'2025-09-03'},
+{id:'25-pp-paris',y:2025,name:'Premier Padel Paris Major',city:'Paris',country:'FRA',tier:'major',pts:2000,dateStart:'2025-09-08',dateEnd:'2025-09-14',qual:'2025-09-08',draw:'2025-09-10'},
+{id:'25-pp-dusseldorf',y:2025,name:'Premier Padel Germany P2',city:'Düsseldorf',country:'GER',tier:'p2',pts:500,dateStart:'2025-09-22',dateEnd:'2025-09-28',qual:'2025-09-22',draw:'2025-09-24'},
+{id:'25-pp-rotterdam',y:2025,name:'Premier Padel Rotterdam P1',city:'Roterdão',country:'NED',tier:'p1',pts:1000,dateStart:'2025-09-29',dateEnd:'2025-10-05',qual:'2025-09-29',draw:'2025-10-01'},
+{id:'25-pp-milano',y:2025,name:'Premier Padel Milano P1',city:'Milão',country:'ITA',tier:'p1',pts:1000,dateStart:'2025-10-06',dateEnd:'2025-10-12',qual:'2025-10-06',draw:'2025-10-08'},
+{id:'25-pp-newgiza',y:2025,name:'Premier Padel NewGiza P2',city:'Gizé',country:'EGY',tier:'p2',pts:500,dateStart:'2025-10-25',dateEnd:'2025-11-01',qual:'2025-10-25',draw:'2025-10-27'},
+{id:'25-pp-dubai',y:2025,name:'Premier Padel Dubai P1',city:'Dubai',country:'UAE',tier:'p1',pts:1000,dateStart:'2025-11-10',dateEnd:'2025-11-16',qual:'2025-11-10',draw:'2025-11-12'},
+{id:'25-pp-mexico',y:2025,name:'Premier Padel Mexico Major',city:'Acapulco',country:'MEX',tier:'major',pts:2000,dateStart:'2025-11-24',dateEnd:'2025-11-30',qual:'2025-11-24',draw:'2025-11-25'},
+{id:'25-pp-finals',y:2025,name:'Premier Padel Finals Barcelona',city:'Barcelona',country:'ESP',tier:'p1',pts:1500,dateStart:'2025-12-08',dateEnd:'2025-12-14',qual:'2025-12-08',draw:'2025-12-09'},
+// ─── 2025 FIP TOUR (selecção relevante) ─────────────────────────────────
+{id:'25-gold-paredes',y:2025,name:'FIP Gold Portugal Paredes',city:'Paredes',country:'POR',tier:'gold',pts:300,dateStart:'2025-02-17',dateEnd:'2025-02-23',qual:'2025-02-17',draw:'2025-02-20'},
+{id:'25-silver-pontadelgada',y:2025,name:'FIP Silver Ponta Delgada',city:'Ponta Delgada',country:'POR',tier:'silver',pts:150,dateStart:'2025-03-06',dateEnd:'2025-03-09',draw:'2025-03-06'},
+{id:'25-plat-mexico',y:2025,name:'FIP Platinum México Puebla',city:'Puebla',country:'MEX',tier:'platinum',pts:700,dateStart:'2025-03-02',dateEnd:'2025-03-08',qual:'2025-03-02',draw:'2025-03-05'},
+{id:'25-bronze-setubal',y:2025,name:'FIP Bronze Setúbal',city:'Setúbal',country:'POR',tier:'bronze',pts:60,dateStart:'2025-04-11',dateEnd:'2025-04-13',draw:'2025-04-11'},
+{id:'25-bronze-finland',y:2025,name:'FIP Bronze ESC Padel Espoo',city:'Espoo',country:'FIN',tier:'bronze',pts:60,dateStart:'2025-04-11',dateEnd:'2025-04-13',draw:'2025-04-11'},
+{id:'25-plat-norway',y:2025,name:'FIP Platinum Norway Oslo',city:'Oslo',country:'NOR',tier:'platinum',pts:700,dateStart:'2025-05-19',dateEnd:'2025-05-25',qual:'2025-05-19',draw:'2025-05-22'},
+{id:'25-gold-paredes-jun',y:2025,name:'FIP Gold Paredes / Lusitânia Portugal Master',city:'Paredes',country:'POR',tier:'gold',pts:300,dateStart:'2025-06-12',dateEnd:'2025-06-15',qual:'2025-06-12',draw:'2025-06-13',fpp:true},
+{id:'25-gold-dubai-apr',y:2025,name:'FIP Gold DAMAC Dubai',city:'Dubai',country:'UAE',tier:'gold',pts:300,dateStart:'2025-02-25',dateEnd:'2025-03-02',qual:'2025-02-25',draw:'2025-02-27'},
+{id:'25-plat-saudi-aug',y:2025,name:'FIP Platinum Saudi Arabia',city:'Riade',country:'KSA',tier:'platinum',pts:700,dateStart:'2025-08-18',dateEnd:'2025-08-24',qual:'2025-08-18',draw:'2025-08-21'},
+{id:'25-plat-mexico-nov',y:2025,name:'FIP Platinum México II',city:'México',country:'MEX',tier:'platinum',pts:700,dateStart:'2025-11-03',dateEnd:'2025-11-09',qual:'2025-11-03',draw:'2025-11-06'},
+{id:'25-plat-italy-dec',y:2025,name:'FIP Platinum Italy Roma',city:'Roma',country:'ITA',tier:'platinum',pts:700,dateStart:'2025-12-01',dateEnd:'2025-12-07',qual:'2025-12-01',draw:'2025-12-04'},
+// ─── 2025 FPP ────────────────────────────────────────────────────────────
+{id:'25-fpp-masters-jan',y:2025,name:'FPP Masters Open Portugal',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2025-01-18',dateEnd:'2025-01-19',draw:'2025-01-18',fpp:true},
+{id:'25-fpp-masters-mar',y:2025,name:'FPP Masters Setúbal',city:'Setúbal',country:'POR',tier:'fpp',pts:0,dateStart:'2025-03-15',dateEnd:'2025-03-16',draw:'2025-03-15',fpp:true},
+{id:'25-fpp-nacional',y:2025,name:'Campeonato Nacional FPP',city:'Portugal',country:'POR',tier:'nat',pts:0,dateStart:'2025-05-03',dateEnd:'2025-05-04',draw:'2025-05-03',fpp:true},
+{id:'25-fpp-masters-jun',y:2025,name:'FPP Masters Final 2025',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2025-06-28',dateEnd:'2025-06-29',draw:'2025-06-28',fpp:true},
+{id:'25-fpp-masters-sep',y:2025,name:'FPP Open Setembro',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2025-09-27',dateEnd:'2025-09-28',draw:'2025-09-27',fpp:true},
+{id:'25-fpp-masters-nov',y:2025,name:'FPP Masters Final',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2025-11-29',dateEnd:'2025-11-30',draw:'2025-11-29',fpp:true},
+// ═══════════════════════════════════════════════════════════════════════
+//  2026 PREMIER PADEL (datas do quadro principal, fonte: PDF oficial)
+// ═══════════════════════════════════════════════════════════════════════
+{id:'26-pp-riyadh',y:2026,name:'Premier Padel Riyadh Season P1',city:'Riade',country:'KSA',tier:'p1',pts:1000,dateStart:'2026-02-07',dateEnd:'2026-02-14',qual:'2026-02-07',draw:'2026-02-09'},
+{id:'26-pp-gijon',y:2026,name:'Premier Padel Gijón P2',city:'Gijón',country:'ESP',tier:'p2',pts:500,dateStart:'2026-03-01',dateEnd:'2026-03-08',qual:'2026-03-01',draw:'2026-03-02'},
+{id:'26-pp-cancun',y:2026,name:'Premier Padel Cancún P2',city:'Cancún',country:'MEX',tier:'p2',pts:500,dateStart:'2026-03-16',dateEnd:'2026-03-22',qual:'2026-03-16',draw:'2026-03-16'},
+{id:'26-pp-miami',y:2026,name:'Premier Padel Miami P1',city:'Miami',country:'USA',tier:'p1',pts:1000,dateStart:'2026-03-23',dateEnd:'2026-03-29',qual:'2026-03-23',draw:'2026-03-23'},
+{id:'26-pp-qatar',y:2026,name:'Premier Padel Qatar Major ⚠️ Adiado',city:'Doha',country:'QAT',tier:'major',pts:2000,dateStart:'2026-04-06',dateEnd:'2026-04-11',qual:'2026-04-06',draw:'2026-04-06'},
+{id:'26-pp-newgiza',y:2026,name:'Premier Padel NewGiza P2',city:'Gizé',country:'EGY',tier:'p2',pts:500,dateStart:'2026-04-13',dateEnd:'2026-04-18',qual:'2026-04-13',draw:'2026-04-13'},
+{id:'26-pp-brussels',y:2026,name:'Premier Padel Brussels P2',city:'Bruxelas',country:'BEL',tier:'p2',pts:500,dateStart:'2026-04-20',dateEnd:'2026-04-26',qual:'2026-04-20',draw:'2026-04-20'},
+{id:'26-pp-asuncion',y:2026,name:'Premier Padel Asunción P2',city:'Assunção',country:'PAR',tier:'p2',pts:500,dateStart:'2026-05-04',dateEnd:'2026-05-10',qual:'2026-05-04',draw:'2026-05-04'},
+{id:'26-pp-baires',y:2026,name:'Premier Padel Buenos Aires P1',city:'Buenos Aires',country:'ARG',tier:'p1',pts:1000,dateStart:'2026-05-11',dateEnd:'2026-05-17',qual:'2026-05-11',draw:'2026-05-11'},
+{id:'26-pp-italy',y:2026,name:'Premier Padel Italy Major',city:'Roma',country:'ITA',tier:'major',pts:2000,dateStart:'2026-06-01',dateEnd:'2026-06-07',qual:'2026-06-01',draw:'2026-06-01'},
+{id:'26-pp-valencia',y:2026,name:'Premier Padel Valencia P1',city:'Valência',country:'ESP',tier:'p1',pts:1000,dateStart:'2026-06-08',dateEnd:'2026-06-14',qual:'2026-06-08',draw:'2026-06-08'},
+{id:'26-pp-valladolid',y:2026,name:'Premier Padel Valladolid P2',city:'Valladolid',country:'ESP',tier:'p2',pts:500,dateStart:'2026-06-22',dateEnd:'2026-06-28',qual:'2026-06-22',draw:'2026-06-22'},
+{id:'26-pp-bordeaux',y:2026,name:'Premier Padel Bordeaux P2',city:'Bordéus',country:'FRA',tier:'p2',pts:500,dateStart:'2026-06-29',dateEnd:'2026-07-05',qual:'2026-06-29',draw:'2026-06-29'},
+{id:'26-pp-malaga',y:2026,name:'Premier Padel Málaga P1',city:'Málaga',country:'ESP',tier:'p1',pts:1000,dateStart:'2026-07-13',dateEnd:'2026-07-19',qual:'2026-07-13',draw:'2026-07-13'},
+{id:'26-pp-pretoria',y:2026,name:'Premier Padel Pretoria P2',city:'Pretória',country:'RSA',tier:'p2',pts:500,dateStart:'2026-07-27',dateEnd:'2026-08-02',qual:'2026-07-27',draw:'2026-07-27'},
+{id:'26-pp-london',y:2026,name:'Premier Padel London P1',city:'Londres',country:'GBR',tier:'p1',pts:1000,dateStart:'2026-08-03',dateEnd:'2026-08-09',qual:'2026-08-03',draw:'2026-08-03'},
+{id:'26-pp-madrid',y:2026,name:'Premier Padel Madrid P1',city:'Madrid',country:'ESP',tier:'p1',pts:1000,dateStart:'2026-08-31',dateEnd:'2026-09-06',qual:'2026-08-31',draw:'2026-08-31'},
+{id:'26-pp-paris',y:2026,name:'Premier Padel Paris Major',city:'Paris',country:'FRA',tier:'major',pts:2000,dateStart:'2026-09-07',dateEnd:'2026-09-13',qual:'2026-09-07',draw:'2026-09-07'},
+{id:'26-pp-rotterdam',y:2026,name:'Premier Padel Rotterdam P2',city:'Roterdão',country:'NED',tier:'p2',pts:500,dateStart:'2026-09-28',dateEnd:'2026-10-04',qual:'2026-09-28',draw:'2026-09-28'},
+{id:'26-pp-germany',y:2026,name:'Premier Padel Germany P2',city:'Alemanha',country:'GER',tier:'p2',pts:500,dateStart:'2026-10-05',dateEnd:'2026-10-11',qual:'2026-10-05',draw:'2026-10-05'},
+{id:'26-pp-milano',y:2026,name:'Premier Padel Milano P1',city:'Milão',country:'ITA',tier:'p1',pts:1000,dateStart:'2026-10-12',dateEnd:'2026-10-18',qual:'2026-10-12',draw:'2026-10-12'},
+{id:'26-pp-kuwait',y:2026,name:'Premier Padel Kuwait P1',city:'Kuwait',country:'KWT',tier:'p1',pts:1000,dateStart:'2026-10-26',dateEnd:'2026-10-31',qual:'2026-10-26',draw:'2026-10-26'},
+{id:'26-pp-fipcup',y:2026,name:'FIP World Cup',city:'A definir',country:'—',tier:'champ',pts:0,dateStart:'2026-11-01',dateEnd:'2026-11-07',draw:'2026-11-01'},
+{id:'26-pp-dubai',y:2026,name:'Premier Padel Dubai P1',city:'Dubai',country:'UAE',tier:'p1',pts:1000,dateStart:'2026-11-09',dateEnd:'2026-11-15',qual:'2026-11-09',draw:'2026-11-09'},
+{id:'26-pp-mexico',y:2026,name:'Premier Padel Mexico Major',city:'Acapulco',country:'MEX',tier:'major',pts:2000,dateStart:'2026-11-23',dateEnd:'2026-11-29',qual:'2026-11-23',draw:'2026-11-23'},
+{id:'26-pp-finals',y:2026,name:'Premier Padel Finals Barcelona',city:'Barcelona',country:'ESP',tier:'p1',pts:1500,dateStart:'2026-12-07',dateEnd:'2026-12-13',qual:'2026-12-07',draw:'2026-12-07'},
+// ═══════════════════════════════════════════════════════════════════════
+//  2026 FIP TOUR — Platinum & Gold + Portugal/relevantes
+// ═══════════════════════════════════════════════════════════════════════
+{id:'26-plat-marseille',y:2026,name:'FIP Platinum Ville de Marseille',city:'Marselha',country:'FRA',tier:'platinum',pts:700,dateStart:'2026-02-02',dateEnd:'2026-02-08',qual:'2026-02-02',draw:'2026-02-04'},
+{id:'26-bronze-madeira',y:2026,name:'FIP Bronze Madeira',city:'Funchal',country:'POR',tier:'bronze',pts:60,dateStart:'2026-02-01',dateEnd:'2026-02-08',draw:'2026-02-01'},
+{id:'26-gold-pontadelgada',y:2026,name:'FIP Gold Ponta Delgada',city:'Ponta Delgada',country:'POR',tier:'gold',pts:300,dateStart:'2026-03-04',dateEnd:'2026-03-08',qual:'2026-03-04',draw:'2026-03-04'},
+{id:'26-silver-viseu',y:2026,name:'FIP Silver Viseu',city:'Viseu',country:'POR',tier:'silver',pts:150,dateStart:'2026-03-24',dateEnd:'2026-03-29',draw:'2026-03-24'},
+{id:'26-bronze-viseu',y:2026,name:'FIP Bronze Viseu',city:'Viseu',country:'POR',tier:'bronze',pts:60,dateStart:'2026-03-24',dateEnd:'2026-03-29',draw:'2026-03-24'},
+{id:'26-silver-mediolanum-parma',y:2026,name:'FIP Silver Mediolanum Padel Cup Parma',city:'Parma',country:'ITA',tier:'silver',pts:150,dateStart:'2026-03-17',dateEnd:'2026-03-22',draw:'2026-03-17'},
+{id:'26-gold-almaty',y:2026,name:'FIP Gold Almaty',city:'Almaty',country:'KAZ',tier:'gold',pts:300,dateStart:'2026-04-01',dateEnd:'2026-04-05',qual:'2026-04-01',draw:'2026-04-01'},
+{id:'26-bronze-norway',y:2026,name:'FIP Bronze S4Sport Open Eidsvoll',city:'Eidsvoll',country:'NOR',tier:'bronze',pts:60,dateStart:'2026-04-09',dateEnd:'2026-04-12',draw:'2026-04-09'},
+{id:'26-silver-nola',y:2026,name:'FIP Silver Nola',city:'Nola',country:'ITA',tier:'silver',pts:150,dateStart:'2026-04-15',dateEnd:'2026-04-19',draw:'2026-04-15'},
+{id:'26-silver-leiria',y:2026,name:'FIP Silver Leiria Master Padel',city:'Leiria',country:'POR',tier:'silver',pts:150,dateStart:'2026-04-29',dateEnd:'2026-05-03',draw:'2026-04-29'},
+{id:'26-silver-vrsa',y:2026,name:'FIP Silver Vila Real de Santo António',city:'Vila Real de Sto. António',country:'POR',tier:'silver',pts:150,dateStart:'2026-05-05',dateEnd:'2026-05-09',draw:'2026-05-05'},
+{id:'26-silver-oeiras',y:2026,name:'FIP Silver Oeiras',city:'Oeiras',country:'POR',tier:'silver',pts:150,dateStart:'2026-05-20',dateEnd:'2026-05-24',draw:'2026-05-20'},
+{id:'26-plat-albania',y:2026,name:'FIP Platinum Albania Tirana',city:'Tirana',country:'ALB',tier:'platinum',pts:700,dateStart:'2026-05-24',dateEnd:'2026-05-30',qual:'2026-05-24',draw:'2026-05-26'},
+{id:'26-bronze-porto-jun',y:2026,name:'FIP Bronze Matosinhos',city:'Matosinhos',country:'POR',tier:'bronze',pts:60,dateStart:'2026-06-05',dateEnd:'2026-06-07',draw:'2026-06-05'},
+{id:'26-gold-shanghai',y:2026,name:'FIP Gold Shanghai',city:'Xangai',country:'CHN',tier:'gold',pts:300,dateStart:'2026-06-08',dateEnd:'2026-06-14',qual:'2026-06-08',draw:'2026-06-08'},
+{id:'26-plat-paredes',y:2026,name:'FIP Platinum Lusitânia Portugal Master Padel',city:'Paredes',country:'POR',tier:'platinum',pts:700,dateStart:'2026-06-15',dateEnd:'2026-06-21',qual:'2026-06-15',draw:'2026-06-16',fpp:true},
+{id:'26-silver-oporto-jul',y:2026,name:'FIP Silver Oporto',city:'Porto',country:'POR',tier:'silver',pts:150,dateStart:'2026-07-20',dateEnd:'2026-07-26',draw:'2026-07-20'},
+{id:'26-bronze-portimao',y:2026,name:'FIP Bronze Portimão',city:'Portimão',country:'POR',tier:'bronze',pts:60,dateStart:'2026-08-03',dateEnd:'2026-08-09',draw:'2026-08-03'},
+{id:'26-gold-venezuela',y:2026,name:'FIP Gold Puerto Cabello Venezuela',city:'Puerto Cabello',country:'VEN',tier:'gold',pts:300,dateStart:'2026-08-10',dateEnd:'2026-08-16',qual:'2026-08-10',draw:'2026-08-10'},
+{id:'26-gold-san-luis',y:2026,name:'FIP Gold San Luis México',city:'San Luis',country:'MEX',tier:'gold',pts:300,dateStart:'2026-08-17',dateEnd:'2026-08-23',qual:'2026-08-17',draw:'2026-08-17'},
+{id:'26-gold-belgrade',y:2026,name:'FIP Gold Belgrade',city:'Belgrado',country:'SRB',tier:'gold',pts:300,dateStart:'2026-08-24',dateEnd:'2026-08-30',qual:'2026-08-24',draw:'2026-08-24'},
+{id:'26-bronze-ericeira',y:2026,name:'FIP Bronze Ericeira',city:'Ericeira',country:'POR',tier:'bronze',pts:60,dateStart:'2026-08-31',dateEnd:'2026-09-06',draw:'2026-08-31'},
+{id:'26-gold-bucharest',y:2026,name:'FIP Gold Bucharest',city:'Bucareste',country:'ROM',tier:'gold',pts:300,dateStart:'2026-09-07',dateEnd:'2026-09-13',qual:'2026-09-07',draw:'2026-09-07'},
+{id:'26-silver-lisboa',y:2026,name:'FIP Silver Lisboa',city:'Lisboa',country:'POR',tier:'silver',pts:150,dateStart:'2026-09-07',dateEnd:'2026-09-13',draw:'2026-09-07'},
+{id:'26-silver-guimaraes',y:2026,name:'FIP Silver Guimarães',city:'Guimarães',country:'POR',tier:'silver',pts:150,dateStart:'2026-09-14',dateEnd:'2026-09-20',draw:'2026-09-14'},
+{id:'26-silver-sjm',y:2026,name:'FIP Silver São João da Madeira',city:'São João da Madeira',country:'POR',tier:'silver',pts:150,dateStart:'2026-09-21',dateEnd:'2026-09-27',draw:'2026-09-21'},
+{id:'26-plat-lyon',y:2026,name:'FIP Platinum Lyon',city:'Lyon',country:'FRA',tier:'platinum',pts:700,dateStart:'2026-09-21',dateEnd:'2026-09-27',qual:'2026-09-21',draw:'2026-09-23'},
+{id:'26-bronze-almeirim',y:2026,name:'FIP Bronze Almeirim',city:'Almeirim',country:'POR',tier:'bronze',pts:60,dateStart:'2026-09-28',dateEnd:'2026-10-04',draw:'2026-09-28'},
+{id:'26-gold-perugia',y:2026,name:'FIP Gold Mediolanum Perugia',city:'Perugia',country:'ITA',tier:'gold',pts:300,dateStart:'2026-09-28',dateEnd:'2026-10-04',qual:'2026-09-28',draw:'2026-09-28'},
+{id:'26-bronze-oeiras',y:2026,name:'FIP Bronze Oeiras',city:'Oeiras',country:'POR',tier:'bronze',pts:60,dateStart:'2026-10-12',dateEnd:'2026-10-18',draw:'2026-10-12'},
+{id:'26-gold-sevilla',y:2026,name:'FIP Gold Ciudad de Sevilla',city:'Sevilha',country:'ESP',tier:'gold',pts:300,dateStart:'2026-10-12',dateEnd:'2026-10-18',qual:'2026-10-12',draw:'2026-10-12'},
+{id:'26-gold-melilla',y:2026,name:'FIP Gold Melilla',city:'Melilla',country:'ESP',tier:'gold',pts:300,dateStart:'2026-10-19',dateEnd:'2026-10-25',qual:'2026-10-19',draw:'2026-10-19'},
+{id:'26-gold-torino',y:2026,name:'FIP Gold Mediolanum Torino',city:'Turim',country:'ITA',tier:'gold',pts:300,dateStart:'2026-10-26',dateEnd:'2026-11-01',qual:'2026-10-26',draw:'2026-10-26'},
+{id:'26-silver-oporto-nov',y:2026,name:'FIP Silver Oporto II',city:'Porto',country:'POR',tier:'silver',pts:150,dateStart:'2026-11-09',dateEnd:'2026-11-15',draw:'2026-11-09'},
+{id:'26-plat-mexico-nov',y:2026,name:'FIP Platinum México',city:'México',country:'MEX',tier:'platinum',pts:700,dateStart:'2026-11-16',dateEnd:'2026-11-22',qual:'2026-11-16',draw:'2026-11-18'},
+// ═══════════════════════════════════════════════════════════════════════
+//  2026 FPP — Absolutos ≥5000 + FIP com parceria FPP + Campeonatos
+// ═══════════════════════════════════════════════════════════════════════
+{id:'26-fpp-bronze-madeira',y:2026,name:'FIP Bronze Madeira',city:'Madeira',country:'POR',tier:'bronze',pts:60,dateStart:'2026-02-04',dateEnd:'2026-02-08',draw:'2026-02-04',fpp:true},
+{id:'26-fpp-gold-acores',y:2026,name:'FIP Gold Açores',city:'Açores – São Miguel',country:'POR',tier:'gold',pts:300,dateStart:'2026-03-02',dateEnd:'2026-03-08',qual:'2026-03-02',draw:'2026-03-04',fpp:true},
+{id:'26-fpp-cpc-caldas',y:2026,name:'II CPC Padel Cup',city:'Caldas da Rainha',country:'POR',tier:'fpp',pts:0,dateStart:'2026-03-11',dateEnd:'2026-03-15',draw:'2026-03-11',fpp:true},
+{id:'26-fpp-urban-trofa',y:2026,name:'Urban Padel Open',city:'Trofa',country:'POR',tier:'fpp',pts:0,dateStart:'2026-03-20',dateEnd:'2026-03-22',draw:'2026-03-20',fpp:true},
+{id:'26-fpp-silver-viseu',y:2026,name:'FIP Silver Viseu FPP',city:'Viseu',country:'POR',tier:'silver',pts:150,dateStart:'2026-03-25',dateEnd:'2026-03-29',qual:'2026-03-25',draw:'2026-03-25',fpp:true},
+{id:'26-fpp-lx-clash',y:2026,name:'2º LX Clash Stars by Carlsberg',city:'Loures',country:'POR',tier:'fpp',pts:0,dateStart:'2026-04-03',dateEnd:'2026-04-05',draw:'2026-04-03',fpp:true},
+{id:'26-fpp-villae-braga',y:2026,name:'Open Villae Verdasca',city:'Braga',country:'POR',tier:'fpp',pts:0,dateStart:'2026-04-08',dateEnd:'2026-04-12',draw:'2026-04-08',fpp:true},
+{id:'26-fpp-racketspro-eul',y:2026,name:'IX Open Rackets Pro EUL',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2026-04-10',dateEnd:'2026-04-12',draw:'2026-04-10',fpp:true},
+{id:'26-fpp-reg-abs-norte',y:2026,name:'Camp. Regional Absolutos Norte/Centro/Lisboa/Sul',city:'Portugal',country:'POR',tier:'nat',pts:0,dateStart:'2026-04-17',dateEnd:'2026-04-19',draw:'2026-04-17',fpp:true},
+{id:'26-fpp-dream-setubal',y:2026,name:'Open Dream Padel',city:'Setúbal',country:'POR',tier:'fpp',pts:0,dateStart:'2026-04-21',dateEnd:'2026-04-26',draw:'2026-04-21',fpp:true},
+{id:'26-fpp-toppadel-fluvial',y:2026,name:'Open Top-padel Fluvial',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2026-04-24',dateEnd:'2026-04-26',draw:'2026-04-24',fpp:true},
+{id:'26-fpp-silver-leiria',y:2026,name:'FIP Silver Leiria FPP',city:'Leiria',country:'POR',tier:'silver',pts:150,dateStart:'2026-04-30',dateEnd:'2026-05-03',qual:'2026-04-30',draw:'2026-04-30',fpp:true},
+{id:'26-fpp-silver-vrsa',y:2026,name:'FIP Silver VRSA FPP',city:'Vila Real de Sto. António',country:'POR',tier:'silver',pts:150,dateStart:'2026-05-04',dateEnd:'2026-05-10',draw:'2026-05-04',fpp:true},
+{id:'26-fpp-indoor-padel',y:2026,name:'Open Indoor Padel Center',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2026-05-15',dateEnd:'2026-05-17',draw:'2026-05-15',fpp:true},
+{id:'26-fpp-silver-oeiras',y:2026,name:'FIP Silver Oeiras FPP',city:'Oeiras',country:'POR',tier:'silver',pts:150,dateStart:'2026-05-19',dateEnd:'2026-05-24',qual:'2026-05-19',draw:'2026-05-19',fpp:true},
+{id:'26-fpp-toppadel-maia',y:2026,name:'Open Top-padel Maia',city:'Maia',country:'POR',tier:'fpp',pts:0,dateStart:'2026-05-22',dateEnd:'2026-05-24',draw:'2026-05-22',fpp:true},
+{id:'26-fpp-clubes-nac',y:2026,name:'Campeonato Nacional de Clubes Absolutos',city:'Porto',country:'POR',tier:'nat',pts:0,dateStart:'2026-05-29',dateEnd:'2026-05-31',draw:'2026-05-29',fpp:true},
+{id:'26-fpp-bronze-porto',y:2026,name:'FIP Bronze Porto FPP',city:'Porto',country:'POR',tier:'bronze',pts:60,dateStart:'2026-06-03',dateEnd:'2026-06-07',draw:'2026-06-03',fpp:true},
+{id:'26-fpp-warrior-guimaraes',y:2026,name:'Open Warrior Padel Arena',city:'Guimarães',country:'POR',tier:'fpp',pts:0,dateStart:'2026-06-12',dateEnd:'2026-06-14',draw:'2026-06-12',fpp:true},
+{id:'26-fpp-carlsberg-wpadel',y:2026,name:'7º Open Carlsberg W Padel Country Club',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2026-06-12',dateEnd:'2026-06-14',draw:'2026-06-12',fpp:true},
+{id:'26-fpp-plat-paredes',y:2026,name:'FIP Platinum Paredes / Lusitânia Portugal Master',city:'Paredes',country:'POR',tier:'platinum',pts:700,dateStart:'2026-06-16',dateEnd:'2026-06-21',qual:'2026-06-16',draw:'2026-06-16',fpp:true},
+{id:'26-fpp-urban-casal',y:2026,name:'Open Ultimate Urban Padel',city:'Casal de Cambra',country:'POR',tier:'fpp',pts:0,dateStart:'2026-06-26',dateEnd:'2026-06-28',draw:'2026-06-26',fpp:true},
+{id:'26-fpp-qual-nacional',y:2026,name:'Qualifying Campeonato Nacional Absoluto',city:'São João da Madeira',country:'POR',tier:'nat',pts:0,dateStart:'2026-07-03',dateEnd:'2026-07-05',draw:'2026-07-03',fpp:true},
+{id:'26-fpp-nacional',y:2026,name:'🏆 Campeonato Nacional Absoluto FPP',city:'São João da Madeira',country:'POR',tier:'nat',pts:0,dateStart:'2026-07-08',dateEnd:'2026-07-12',draw:'2026-07-08',fpp:true},
+{id:'26-fpp-feel-guimaraes',y:2026,name:'2º Feel Padel Open',city:'Guimarães',country:'POR',tier:'fpp',pts:0,dateStart:'2026-07-17',dateEnd:'2026-07-19',draw:'2026-07-17',fpp:true},
+{id:'26-fpp-monsaraz',y:2026,name:'2º Open Absolutos by Monsaraz Padel Club',city:'Reguengos de Monsaraz',country:'POR',tier:'fpp',pts:0,dateStart:'2026-07-17',dateEnd:'2026-07-19',draw:'2026-07-17',fpp:true},
+{id:'26-fpp-mimosa-porto',y:2026,name:'Mimosa Open Porto — FIP Silver',city:'Porto',country:'POR',tier:'silver',pts:150,dateStart:'2026-07-24',dateEnd:'2026-07-26',qual:'2026-07-24',draw:'2026-07-24',fpp:true},
+{id:'26-fpp-victoria-alb',y:2026,name:'Open AP Victoria Sports by Carlsberg',city:'Albufeira',country:'POR',tier:'fpp',pts:0,dateStart:'2026-07-24',dateEnd:'2026-07-26',draw:'2026-07-24',fpp:true},
+{id:'26-fpp-famalicao',y:2026,name:'4º Open Famalicão',city:'Famalicão',country:'POR',tier:'fpp',pts:0,dateStart:'2026-07-31',dateEnd:'2026-08-02',draw:'2026-07-31',fpp:true},
+{id:'26-fpp-bronze-portimao',y:2026,name:'FIP Bronze Portimão FPP',city:'Portimão',country:'POR',tier:'bronze',pts:60,dateStart:'2026-08-05',dateEnd:'2026-08-09',draw:'2026-08-05',fpp:true},
+{id:'26-fpp-vilamoura-summer',y:2026,name:'Vilamoura Summer Cup',city:'Vilamoura',country:'POR',tier:'fpp',pts:0,dateStart:'2026-08-14',dateEnd:'2026-08-16',draw:'2026-08-14',fpp:true},
+{id:'26-fpp-padel4move',y:2026,name:'4º Open Padel4move',city:'Albufeira',country:'POR',tier:'fpp',pts:0,dateStart:'2026-08-21',dateEnd:'2026-08-23',draw:'2026-08-21',fpp:true},
+{id:'26-fpp-bronze-ericeira',y:2026,name:'FIP Bronze Ericeira FPP',city:'Ericeira',country:'POR',tier:'bronze',pts:60,dateStart:'2026-09-01',dateEnd:'2026-09-06',draw:'2026-09-01',fpp:true},
+{id:'26-fpp-silver-lisboa',y:2026,name:'FIP Silver Lisboa FPP',city:'Lisboa',country:'POR',tier:'silver',pts:150,dateStart:'2026-09-09',dateEnd:'2026-09-13',draw:'2026-09-09',fpp:true},
+{id:'26-fpp-campus-qlago',y:2026,name:'The Campus Open',city:'Quinta do Lago',country:'POR',tier:'fpp',pts:0,dateStart:'2026-09-11',dateEnd:'2026-09-13',draw:'2026-09-11',fpp:true},
+{id:'26-fpp-silver-guimaraes',y:2026,name:'FIP Silver Guimarães FPP',city:'Guimarães',country:'POR',tier:'silver',pts:150,dateStart:'2026-09-14',dateEnd:'2026-09-20',draw:'2026-09-14',fpp:true},
+{id:'26-fpp-silver-sjm',y:2026,name:'FIP Silver São João da Madeira FPP',city:'São João da Madeira',country:'POR',tier:'silver',pts:150,dateStart:'2026-09-25',dateEnd:'2026-09-27',draw:'2026-09-25',fpp:true},
+{id:'26-fpp-bronze-almeirim',y:2026,name:'FIP Bronze Almeirim FPP',city:'Almeirim',country:'POR',tier:'bronze',pts:60,dateStart:'2026-10-02',dateEnd:'2026-10-04',draw:'2026-10-02',fpp:true},
+{id:'26-fpp-douro-padel',y:2026,name:'Open D\'Ouro Padel',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-09',dateEnd:'2026-10-11',draw:'2026-10-09',fpp:true},
+{id:'26-fpp-cpa-cascais',y:2026,name:'VI Open CPA Cascais',city:'Cascais',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-09',dateEnd:'2026-10-11',draw:'2026-10-09',fpp:true},
+{id:'26-fpp-bronze-oeiras',y:2026,name:'FIP Bronze Oeiras FPP',city:'Oeiras',country:'POR',tier:'bronze',pts:60,dateStart:'2026-10-13',dateEnd:'2026-10-18',draw:'2026-10-13',fpp:true},
+{id:'26-fpp-pro-padel-torres',y:2026,name:'2º Open Pro Padel Academy Torres Vedras',city:'Torres Vedras',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-20',dateEnd:'2026-10-25',draw:'2026-10-20',fpp:true},
+{id:'26-fpp-your-toppadel',y:2026,name:'Open Your Top-padel Industrial',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2026-10-30',dateEnd:'2026-11-01',draw:'2026-10-30',fpp:true},
+{id:'26-fpp-dezporvinte',y:2026,name:'II Open Dezporvinte',city:'Santarém',country:'POR',tier:'fpp',pts:0,dateStart:'2026-11-06',dateEnd:'2026-11-08',draw:'2026-11-06',fpp:true},
+{id:'26-fpp-caetano-gaia',y:2026,name:'Open Caetano Auto',city:'Vila Nova de Gaia',country:'POR',tier:'fpp',pts:0,dateStart:'2026-11-06',dateEnd:'2026-11-08',draw:'2026-11-06',fpp:true},
+{id:'26-fpp-silver-porto',y:2026,name:'FIP Silver Porto FPP',city:'Porto',country:'POR',tier:'silver',pts:150,dateStart:'2026-11-09',dateEnd:'2026-11-15',draw:'2026-11-09',fpp:true},
+{id:'26-fpp-final-liga',y:2026,name:'Final Liga de Clubes Absolutos FPP',city:'Porto',country:'POR',tier:'nat',pts:0,dateStart:'2026-11-19',dateEnd:'2026-11-22',draw:'2026-11-19',fpp:true},
+{id:'26-fpp-masters-final',y:2026,name:'🏆 Masters Final FPP Absoluto',city:'Paredes',country:'POR',tier:'fpp',pts:0,dateStart:'2026-11-27',dateEnd:'2026-11-29',draw:'2026-11-27',fpp:true},
+];
+
+// ═══════════════════════════════════════════════════
+//  STATE
+// ═══════════════════════════════════════════════════
+let tournaments = [...BASE];
+let userTournaments = [];   // custom added
+let userData = {};          // per-tournament user data
+let activeYear = 2026;
+let activeFilter = 'all';
+let openCardId = null;
+let editingId = null;
+let deleteTargetId = null;
+
+// ═══════════════════════════════════════════════════
+//  PERSISTENT STORAGE (Claude artifact storage — syncs across devices)
+// ═══════════════════════════════════════════════════
+async function loadFromStorage(){
+  try {
+    const r = await window.storage.get(STORAGE_KEY);
+    if(r && r.value){
+      const d = JSON.parse(r.value);
+      userData = d.userData || {};
+      userTournaments = d.userTournaments || [];
+    }
+  } catch(e){ loadLocalFallback(); }
+  setSyncStatus('synced','Sincronizado');
+  rebuildList(); renderStats(); renderList();
+}
+async function saveToStorage(){
+  setSyncStatus('syncing','A sincronizar...');
+  const payload = JSON.stringify({ userData, userTournaments, savedAt: new Date().toISOString() });
+  try {
+    await window.storage.set(STORAGE_KEY, payload);
+    setSyncStatus('synced','Sincronizado — '+new Date().toLocaleTimeString('pt-PT',{hour:'2-digit',minute:'2-digit'}));
+    saveLocalFallback();
+  } catch(e){
+    setSyncStatus('error','Erro de sincronização');
+    saveLocalFallback();
+  }
+}
+function loadLocalFallback(){
+  try{ const d=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); userData=d.userData||{}; userTournaments=d.userTournaments||[]; }catch(e){}
+}
+function saveLocalFallback(){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({userData,userTournaments})); }catch(e){}
+}
+function setSyncStatus(state, msg){
+  const dot=document.getElementById('syncDot');
+  const lbl=document.getElementById('syncLabel');
+  dot.className='sync-dot '+state;
+  lbl.textContent=msg;
+}
+
+function getU(id){ return userData[id]||{}; }
+function setU(id,key,val){ if(!userData[id])userData[id]={}; userData[id][key]=val; saveToStorage(); }
+function setUObj(id,obj){ userData[id]={...(userData[id]||{}),...obj}; saveToStorage(); }
+
+// ═══════════════════════════════════════════════════
+//  LIST MANAGEMENT
+// ═══════════════════════════════════════════════════
+function rebuildList(){
+  tournaments = [...BASE, ...userTournaments];
+}
+
+function filteredList(){
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  return tournaments.filter(t=>{
+    if(t.y !== activeYear) return false;
+    if(q && !t.name.toLowerCase().includes(q) && !t.city.toLowerCase().includes(q) && !t.country.toLowerCase().includes(q)) return false;
+    const u = getU(t.id);
+    if(activeFilter==='all') return true;
+    if(activeFilter==='starred') return u.starred;
+    if(activeFilter==='confirmado') return u.status==='confirmado';
+    if(activeFilter==='por') return isPOR(t);
+    if(activeFilter==='fpp') return t.fpp||t.tier==='fpp'||t.tier==='nat';
+    if(activeFilter==='nat') return t.tier==='nat'||t.tier==='champ';
+    return t.tier===activeFilter;
+  });
+}
+
+// ═══════════════════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════════════════
+function renderStats(){
+  const all = tournaments.filter(t=>t.y===activeYear);
+  const confirmed = all.filter(t=>getU(t.id).status==='confirmado').length;
+  const starred   = all.filter(t=>getU(t.id).starred).length;
+  const pp = all.filter(t=>['major','p1','p2'].includes(t.tier)).length;
+  const fipT = all.filter(t=>['platinum','gold','silver','bronze'].includes(t.tier)).length;
+  document.getElementById('statsBar').innerHTML=`
+    <div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div>
+    <div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐ Meus</div></div>`;
+}
+
+function renderList(){
+  const list = filteredList();
+  const el = document.getElementById('mainContent');
+  if(!list.length){ el.innerHTML='<div class="empty"><big>🎾</big>Nenhum torneio encontrado</div>'; return; }
+  const byMonth={};
+  list.forEach(t=>{ const m=getMonthIdx(t.dateStart); if(!byMonth[m])byMonth[m]=[]; byMonth[m].push(t); });
+  let html='';
+  Object.keys(byMonth).sort((a,b)=>+a-+b).forEach(mk=>{
+    html+=`<div class="month-group"><div class="month-label">${MONTHSF[mk].toUpperCase()}</div>`;
+    byMonth[mk].forEach(t=>{ html+=renderCard(t); });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
+
+function renderCard(t){
+  const u=getU(t.id);
+  const isOpen=openCardId===t.id;
+  const past=isPast(t)&&!u.starred&&u.status!=='confirmado';
+  const col=`var(${TIER_COL[t.tier]||'--muted'})`;
+  const isCustom=!!t.custom;
+
+  let extraBadges='';
+  if(u.partner) extraBadges+=`<span class="badge badge-partner">👤 ${u.partner}</span>`;
+  if(u.status==='confirmado') extraBadges+=`<span class="badge badge-go">✓ GO</span>`;
+  else if(u.status==='tentativo') extraBadges+=`<span class="badge badge-maybe">? Talvez</span>`;
+  else if(u.status==='nao-vou') extraBadges+=`<span class="badge badge-no">✗ Não vou</span>`;
+  if(t.fpp&&!['fpp','nat'].includes(t.tier)) extraBadges+=`<span class="badge badge-fpp">FPP</span>`;
+  if(isPOR(t)) extraBadges+=`<span class="badge badge-por">🇵🇹</span>`;
+  if(isCustom) extraBadges+=`<span class="badge badge-custom">✎ custom</span>`;
+
+  const ptsStr = t.pts ? `<span class="badge badge-pts">${t.pts}pts</span>` : '';
+
+  return `<div class="t-card${isOpen?' open':''}${u.starred?' is-starred':''}${past?' is-past':''}${isCustom?' is-custom':''}" id="card-${t.id}">
+  <div class="t-main" onclick="toggleCard('${t.id}')">
+    <div class="t-stripe" style="background:${col}"></div>
+    <div class="t-date-col">
+      <div class="t-day" style="color:${col}">${startDay(t.dateStart)}</div>
+      <div class="t-mon">${startMon(t.dateStart)}</div>
+    </div>
+    <div class="t-info">
+      <div class="t-name">${t.name}</div>
+      <div class="t-loc"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${t.city}, ${t.country}</div>
+      <div class="t-badges"><span class="badge badge-${t.tier}">${TIER_LABEL[t.tier]||t.tier.toUpperCase()}</span>${ptsStr}${extraBadges}</div>
+    </div>
+    <div class="t-right">
+      <button class="star-btn${u.starred?' on':''}" onclick="toggleStar(event,'${t.id}')">${u.starred?'★':'☆'}</button>
+      <div class="t-daterange">${fmt(t.dateStart)}<br>→ ${fmt(t.dateEnd)}</div>
+    </div>
+  </div>
+  ${isOpen ? renderExpanded(t,u) : ''}
+</div>`;
+}
+
+function renderExpanded(t,u){
+  return `<div class="t-expanded">
+  <div class="exp-grid">
+    <div class="exp-field">
+      <label>Vou jogar?</label>
+      <select class="exp-select" onchange="setStatus('${t.id}',this.value)">
+        <option value="" ${!u.status?'selected':''}>— decidir —</option>
+        <option value="confirmado" ${u.status==='confirmado'?'selected':''}>✓ Confirmado</option>
+        <option value="tentativo" ${u.status==='tentativo'?'selected':''}>? Tentativo</option>
+        <option value="nao-vou" ${u.status==='nao-vou'?'selected':''}>✗ Não vou</option>
+      </select>
+    </div>
+    <div class="exp-field">
+      <label>Parceiro</label>
+      <input class="exp-input" type="text" placeholder="ex: Fazendeiro" value="${u.partner||''}"
+        onchange="setPartner('${t.id}',this.value)">
+    </div>
+  </div>
+  <div class="dates-grid">
+    ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div class="dp-val">${fmt(t.qual)}</div></div>`:'<div class="date-pill"><div class="dp-lbl">QUALIFYING</div><div class="dp-val">—</div></div>'}
+    <div class="date-pill draw"><div class="dp-lbl">QUADRO PRINC.</div><div class="dp-val">${fmt(t.draw||t.dateStart)}</div></div>
+    <div class="date-pill"><div class="dp-lbl">FIM</div><div class="dp-val">${fmt(t.dateEnd)}</div></div>
+  </div>
+  <textarea class="exp-notes" placeholder="Notas — hotel, voo, contactos..." onchange="setNotes('${t.id}',this.value)">${u.notes||''}</textarea>
+  <div class="exp-actions">
+    <button class="btn-edit" onclick="openEditModal('${t.id}')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      Editar
+    </button>
+    <button class="btn-del" onclick="askDelete('${t.id}')">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+      Apagar
+    </button>
+  </div>
+</div>`;
+}
+
+// ═══════════════════════════════════════════════════
+//  INTERACTIONS
+// ═══════════════════════════════════════════════════
+function toggleCard(id){
+  openCardId = openCardId===id ? null : id;
+  renderList();
+  if(openCardId){ setTimeout(()=>{ const el=document.getElementById('card-'+id); if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'}); },40); }
+}
+
+function toggleStar(e,id){ e.stopPropagation(); const on=!getU(id).starred; setU(id,'starred',on); renderList(); renderStats(); toast(on?'⭐ Adicionado aos favoritos':'Removido dos favoritos'); }
+function setStatus(id,val){ setUObj(id,{status:val}); renderList(); renderStats(); }
+function setPartner(id,val){ setU(id,'partner',val.trim()); renderList(); }
+function setNotes(id,val){ setU(id,'notes',val); }
+
+function setYear(y,el){
+  activeYear=y;
+  document.querySelectorAll('.year-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  openCardId=null;
+  renderStats(); renderList();
+}
+
+function setFilter(f,el){
+  activeFilter=f;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+}
+
+// ═══════════════════════════════════════════════════
+//  ADD / EDIT MODAL
+// ═══════════════════════════════════════════════════
+function openAddModal(){
+  editingId=null;
+  document.getElementById('modalTitle').textContent='Adicionar Torneio';
+  document.getElementById('mName').value='';
+  document.getElementById('mCity').value='';
+  document.getElementById('mCountry').value='POR';
+  document.getElementById('mTier').value='silver';
+  document.getElementById('mPts').value='';
+  document.getElementById('mStart').value=`${activeYear}-01-01`;
+  document.getElementById('mEnd').value=`${activeYear}-01-03`;
+  document.getElementById('mQual').value='';
+  document.getElementById('mDraw').value=`${activeYear}-01-01`;
+  document.getElementById('mPartner').value='';
+  document.getElementById('mStatus').value='';
+  document.getElementById('mNotes').value='';
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function openEditModal(id){
+  const t = tournaments.find(x=>x.id===id);
+  if(!t)return;
+  const u = getU(id);
+  editingId=id;
+  document.getElementById('modalTitle').textContent='Editar Torneio';
+  document.getElementById('mName').value=t.name;
+  document.getElementById('mCity').value=t.city;
+  document.getElementById('mCountry').value=t.country;
+  document.getElementById('mTier').value=t.tier;
+  document.getElementById('mPts').value=t.pts||'';
+  document.getElementById('mStart').value=t.dateStart;
+  document.getElementById('mEnd').value=t.dateEnd;
+  document.getElementById('mQual').value=t.qual||'';
+  document.getElementById('mDraw').value=t.draw||'';
+  document.getElementById('mPartner').value=u.partner||'';
+  document.getElementById('mStatus').value=u.status||'';
+  document.getElementById('mNotes').value=u.notes||'';
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function closeModal(e){ if(e.target===document.getElementById('modalOverlay')) closeModalDirect(); }
+function closeModalDirect(){ document.getElementById('modalOverlay').classList.remove('show'); }
+
+function saveModal(){
+  const name = document.getElementById('mName').value.trim();
+  const dateStart = document.getElementById('mStart').value;
+  if(!name||!dateStart){ toast('⚠️ Nome e data de início obrigatórios'); return; }
+  const obj={
+    name, city:document.getElementById('mCity').value.trim()||'—',
+    country:document.getElementById('mCountry').value.trim()||'—',
+    tier:document.getElementById('mTier').value,
+    pts:parseInt(document.getElementById('mPts').value)||0,
+    dateStart, dateEnd:document.getElementById('mEnd').value||dateStart,
+    qual:document.getElementById('mQual').value||null,
+    draw:document.getElementById('mDraw').value||dateStart,
+    y:activeYear, custom:true
+  };
+  const partner=document.getElementById('mPartner').value.trim();
+  const status=document.getElementById('mStatus').value;
+  const notes=document.getElementById('mNotes').value;
+
+  if(editingId){
+    // find and update
+    const baseIdx=BASE.findIndex(x=>x.id===editingId);
+    if(baseIdx>=0){
+      // base tournament: store overrides in userData + separate override store
+      if(!userData[editingId]) userData[editingId]={};
+      Object.assign(userData[editingId],{_override:{...obj, id:editingId}, partner, status, notes});
+      // apply to in-memory
+      const t=tournaments.find(x=>x.id===editingId);
+      if(t) Object.assign(t, obj, {id:editingId});
+    } else {
+      const idx=userTournaments.findIndex(x=>x.id===editingId);
+      if(idx>=0) Object.assign(userTournaments[idx], obj, {id:editingId});
+    }
+    if(partner||status||notes) userData[editingId]={...userData[editingId],partner,status,notes};
+    toast('✓ Torneio atualizado');
+  } else {
+    const newId=uid();
+    obj.id=newId;
+    obj.fpp=isPOR(obj)&&['silver','gold','platinum','bronze','fpp','nat'].includes(obj.tier);
+    userTournaments.push(obj);
+    if(partner||status||notes) userData[newId]={partner,status,notes};
+    toast('✓ Torneio adicionado');
+  }
+  saveToStorage();
+  rebuildList(); renderStats(); renderList();
+  closeModalDirect();
+}
+
+// ═══════════════════════════════════════════════════
+//  DELETE
+// ═══════════════════════════════════════════════════
+function askDelete(id){
+  const t=tournaments.find(x=>x.id===id);
+  deleteTargetId=id;
+  const baseItem=BASE.find(x=>x.id===id);
+  document.getElementById('confirmMsg').textContent = baseItem
+    ? `Repor "${t.name}" para os valores originais?`
+    : `Apagar "${t.name}"? Esta ação não pode ser revertida.`;
+  document.getElementById('confirmBox').classList.add('show');
+}
+function closeConfirm(){ document.getElementById('confirmBox').classList.remove('show'); deleteTargetId=null; }
+function confirmDelete(){
+  if(!deleteTargetId){closeConfirm();return;}
+  const id=deleteTargetId;
+  const baseItem=BASE.find(x=>x.id===id);
+  if(baseItem){
+    // reset overrides
+    delete userData[id];
+    const t=tournaments.find(x=>x.id===id);
+    if(t) Object.assign(t,baseItem);
+    toast('Torneio reposto para valores originais');
+  } else {
+    userTournaments=userTournaments.filter(x=>x.id!==id);
+    delete userData[id];
+    toast('Torneio apagado');
+  }
+  saveToStorage(); rebuildList(); renderStats(); renderList();
+  openCardId=null;
+  closeConfirm();
+}
+
+// ═══════════════════════════════════════════════════
+//  REFRESH
+// ═══════════════════════════════════════════════════
+async function doRefresh(){
+  const btn=document.getElementById('btnRefresh');
+  btn.classList.add('spinning'); btn.disabled=true;
+  toast('🔄 A verificar atualizações...');
+  await new Promise(r=>setTimeout(r,1500));
+  // Re-merge base with user overrides
+  BASE.forEach(b=>{ const u=getU(b.id); if(u._override) Object.assign(b,u._override); });
+  rebuildList(); renderStats(); renderList();
+  btn.classList.remove('spinning'); btn.disabled=false;
+  toast('✓ Calendário atualizado — '+new Date().toLocaleDateString('pt-PT'));
+}
+
+async function doSync(){
+  setSyncStatus('syncing','A sincronizar...');
+  toast('🔄 A sincronizar entre dispositivos...');
+  await saveToStorage();
+  toast('✓ Sincronizado com sucesso');
+}
+
+// ═══════════════════════════════════════════════════
+//  TOAST
+// ═══════════════════════════════════════════════════
+let toastTimer;
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),2400);
+}
+
+// ═══════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════
+// Set current year tab active
+document.querySelectorAll('.year-tab').forEach(b=>{ if(+b.dataset.y===activeYear) b.classList.add('active'); else b.classList.remove('active'); });
+setSyncStatus('syncing','A carregar...');
+loadFromStorage();
+</script>
+</body>
+</html>
