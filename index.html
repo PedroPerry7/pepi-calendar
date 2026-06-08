@@ -919,13 +919,14 @@ function exportExcel(){
   if(!list.length){toast('Nenhum torneio para exportar');return;}
   
   const rows = [
-    ['Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','FPP','Notas']
+    ['Favorito','Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','FPP','Notas']
   ];
   
   list.forEach(t => {
     const u = getU(t.id);
     const tierLabels = {major:'Major',p1:'P1',p2:'P2',platinum:'Platinum',gold:'Gold',silver:'Silver',bronze:'Bronze',fpp:'FPP',nat:'Nacional FPP',champ:'Campeonato'};
     rows.push([
+      u.starred ? 'Sim' : '',
       t.name,
       t.city,
       t.country,
