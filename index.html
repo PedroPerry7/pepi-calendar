@@ -172,6 +172,59 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .confirm-btns{display:flex;gap:8px}
 .confirm-btns button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
 .confirm-btns .btn-confirm-del{background:rgba(200,64,64,0.2);color:#e07070;border-color:rgba(200,64,64,0.3)}
+
+/* RESULTS */
+.res-section{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
+.res-section-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.res-partner-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.res-partner-row label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.res-partner-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;outline:none}
+.res-partner-input:focus{border-color:var(--gold)}
+.rounds-list{display:flex;flex-direction:column;gap:5px}
+.round-row{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.round-row.has-result{border-color:rgba(228,192,96,0.25)}
+.round-row.is-win{border-left:3px solid var(--gold-t)}
+.round-row.is-loss{border-left:3px solid var(--major)}
+.round-header{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.round-label{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;color:var(--gold);min-width:52px}
+.round-label.qual-round{color:var(--platinum)}
+.round-result-display{flex:1;font-family:'DM Mono',monospace;font-size:11px;color:var(--text)}
+.round-edit-btn{background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:2px 4px}
+.round-edit-btn:active{color:var(--gold)}
+.round-inputs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:6px}
+.round-input{background:var(--bg3);border:1px solid var(--border2);border-radius:5px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 8px;outline:none;width:100%}
+.round-input:focus{border-color:var(--gold)}
+.round-input::placeholder{color:var(--muted);font-size:11px}
+.round-input.full{grid-column:1/-1}
+.round-save-btn{grid-column:1/-1;background:var(--gold);border:none;border-radius:6px;color:#000;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px;cursor:pointer;margin-top:2px}
+.round-save-btn:active{opacity:0.85}
+.round-sep{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);padding:4px 4px 0;letter-spacing:1px}
+
+/* SEARCH PAGE */
+.search-page{position:fixed;inset:0;background:var(--bg);z-index:150;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1)}
+.search-page.show{transform:translateY(0)}
+.search-page-header{padding:calc(var(--safe-top)+14px) 14px 14px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.search-page-title{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:1px;flex:1}
+.search-page-close{background:none;border:none;color:var(--muted2);font-size:22px;cursor:pointer;padding:2px}
+.search-page-input-wrap{padding:12px 14px;border-bottom:1px solid var(--border)}
+.search-page-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;padding:10px 14px;outline:none}
+.search-page-input:focus{border-color:var(--gold)}
+.search-results{flex:1;overflow-y:auto;padding:10px 12px calc(var(--safe-bottom)+20px)}
+.opp-group{margin-bottom:16px}
+.opp-name{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);letter-spacing:1px;margin-bottom:6px;padding:0 2px}
+.opp-match{background:var(--bg2);border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-bottom:5px}
+.opp-match.win{border-left:3px solid var(--gold-t)}
+.opp-match.loss{border-left:3px solid var(--major)}
+.opp-match-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.opp-match-tourn{font-size:12px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
+.opp-match-result{font-family:'DM Mono',monospace;font-size:11px;color:var(--text)}
+.opp-match-result.win{color:var(--gold-t)}
+.opp-match-result.loss{color:var(--major)}
+.opp-match-detail{font-size:11px;color:var(--muted2)}
+.opp-stats{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);padding:0 2px;margin-bottom:4px}
+.fab-row{position:fixed;bottom:calc(var(--safe-bottom)+20px);right:16px;display:flex;flex-direction:column;gap:10px;align-items:flex-end}
+.fab-search{width:46px;height:46px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.3)}
+.fab-search svg{width:18px;height:18px;color:var(--text)}
 </style>
 </head>
 <body>
@@ -222,9 +275,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <input class="search-input" type="search" id="searchInput" placeholder="Pesquisar torneio, cidade, país..." oninput="renderList()">
 </div>
 <div class="content" id="mainContent"></div>
-<button class="fab" onclick="openAddModal()">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-</button>
+<div class="fab-row">
+  <button class="fab" onclick="openAddModal()" style="width:52px;height:52px">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+  </button>
+  <button class="fab-search" onclick="openSearchPage()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  </button>
+</div>
+
+<!-- OPPONENT SEARCH PAGE -->
+<div class="search-page" id="searchPage">
+  <div class="search-page-header">
+    <div class="search-page-title">Pesquisar Adversário</div>
+    <button class="search-page-close" onclick="closeSearchPage()">✕</button>
+  </div>
+  <div class="search-page-input-wrap">
+    <input class="search-page-input" id="oppSearchInput" type="search" 
+      placeholder="Nome do adversário..." oninput="searchOpponent(this.value)" autocomplete="off">
+  </div>
+  <div class="search-results" id="oppResults">
+    <div class="empty" style="padding-top:40px">
+      <big style="font-size:30px">🔍</big>
+      Escreve um nome para pesquisar
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modalBox">
     <div class="modal-title"><span id="modalTitle">Adicionar Torneio</span><button class="modal-close" onclick="closeModalDirect()">✕</button></div>
@@ -689,6 +766,15 @@ async function loadFromStorage(){
     loadLocal();
     setSyncStatus('error','Offline — dados locais');
   }
+  // Pre-load known results if not already present
+  const ljId='26t-fip-bronze-slovenia-09062026';
+  if(!userData[ljId]) userData[ljId]={};
+  if(!userData[ljId].results) userData[ljId].results={};
+  if(!userData[ljId].results['R32']){
+    userData[ljId].results['R32']={opp1:'S. Esteban Barroso',opp2:'L. Miranda Santos',result:'4-6 6-1 6-4'};
+    userData[ljId].partner='Antonio Luque';
+    userData[ljId].starred=true;
+  }
   rebuildList();renderStats();renderList();
 }
 
@@ -873,6 +959,42 @@ ${isOpen?renderExpanded(t,u):''}
 </div>`;}
 
 function renderExpanded(t,u){
+  const rounds=getRounds(t.tier);
+  const results=u.results||{};
+  const partner=u.partner||'';
+  
+  // Build rounds HTML
+  let roundsHtml='';
+  let lastSection='';
+  rounds.forEach(({r,q})=>{
+    const section=q?'QUALIFYING':'QUADRO PRINCIPAL';
+    if(section!==lastSection){
+      roundsHtml+=`<div class="round-sep">${section}</div>`;
+      lastSection=section;
+    }
+    const res=results[r]||{};
+    const hasResult=!!(res.result);
+    const isWin=hasResult&&isWinResult(res.result);
+    const openKey=`${t.id}_${r}`;
+    const isRoundOpen=openRoundKey===openKey;
+    roundsHtml+=`<div class="round-row${hasResult?' has-result':''}${hasResult?(isWin?' is-win':' is-loss'):''}">
+<div class="round-header">
+  <span class="round-label${q?' qual-round':''}">${r}</span>
+  ${hasResult?(()=>{const wc=isWin?'var(--gold-t)':'var(--major)';const opp2str=res.opp2?' / '+res.opp2:'';return `<span class="round-result-display">${res.opp1||''}${opp2str} <b style="color:${wc}">${res.result}</b></span>`;})():'<span class="round-result-display" style="color:var(--muted)">— sem resultado —</span>'}
+  <button class="round-edit-btn" onclick="toggleRoundEdit('${t.id}','${r}',event)">${isRoundOpen?'✕':'✎'}</button>
+</div>
+${isRoundOpen?`<div class="round-inputs">
+  <input class="round-input" placeholder="Adversário 1 (ex: S. Esteban Barroso)" value="${res.opp1||''}" 
+    id="ri_opp1_${t.id}_${r}" autocomplete="off">
+  <input class="round-input" placeholder="Adversário 2 (ex: L. Miranda Santos)" value="${res.opp2||''}" 
+    id="ri_opp2_${t.id}_${r}" autocomplete="off">
+  <input class="round-input full" placeholder="Resultado (ex: 4-6 6-1 6-4)" value="${res.result||''}" 
+    id="ri_res_${t.id}_${r}" autocomplete="off">
+  <button class="round-save-btn" onclick="saveRound('${t.id}','${r}')">Guardar</button>
+</div>`:''}
+</div>`;
+  });
+
   return `<div class="t-expanded">
 <div class="exp-grid">
 <div class="exp-field"><label>Vou jogar?</label>
@@ -890,11 +1012,148 @@ ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div c
 <div class="date-pill draw"><div class="dp-lbl">QUADRO PRINC.</div><div class="dp-val">${d(t.draw||t.dateStart)}</div></div>
 <div class="date-pill"><div class="dp-lbl">FIM</div><div class="dp-val">${d(t.dateEnd)}</div></div>
 </div>
+<div class="res-section">
+  <div class="res-section-title"><span>RESULTADOS</span></div>
+  <div class="res-partner-row">
+    <label>PAR</label>
+    <input class="res-partner-input" type="text" placeholder="ex: Fazendeiro" value="${partner}"
+      onchange="setPartner('${t.id}',this.value)" autocomplete="off">
+  </div>
+  <div class="rounds-list">${roundsHtml}</div>
+</div>
 <textarea class="exp-notes" placeholder="Notas — hotel, voo, contactos..." onchange="setNotes('${t.id}',this.value)">${u.notes||''}</textarea>
 <div class="exp-actions">
 <button class="btn-edit" onclick="openEditModal('${t.id}')">✎ Editar</button>
 <button class="btn-del" onclick="askDelete('${t.id}')">🗑 Apagar</button>
 </div></div>`;}
+
+
+const TIER_ROUNDS = {
+  major:    {qual:['Q1','Q2','Last Q'], main:['R64','R32','R16','QF','SF','F']},
+  p1:       {qual:['Q1','Q2','Last Q'], main:['R64','R32','R16','QF','SF','F']},
+  p2:       {qual:['Q1','Last Q'],      main:['R32','R16','QF','SF','F']},
+  platinum: {qual:['Q1','Q2','Last Q'], main:['R32','R16','QF','SF','F']},
+  gold:     {qual:['Q1','Q2','Last Q'], main:['R32','R16','QF','SF','F']},
+  silver:   {qual:['Q1','Q2','Last Q'], main:['R32','R16','QF','SF','F']},
+  bronze:   {qual:['Q1','Q2','Last Q'], main:['R32','R16','QF','SF','F']},
+  fpp:      {qual:['Q1','Last Q'],      main:['R64','R32','R16','QF','SF','F']},
+  nat:      {qual:['Q1','Last Q'],      main:['R64','R32','R16','QF','SF','F']},
+  champ:    {qual:[],                   main:['R32','R16','QF','SF','F']},
+};
+function getRounds(tier){
+  const r=TIER_ROUNDS[tier]||TIER_ROUNDS.bronze;
+  return [...r.qual.map(x=>({r:x,q:true})),...r.main.map(x=>({r:x,q:false}))];
+}
+
+// ROUND RESULTS
+let openRoundKey=null;
+
+function isWinResult(result){
+  if(!result) return false;
+  const sets=result.trim().split(/\s+/);
+  let wins=0,losses=0;
+  sets.forEach(s=>{
+    const p=s.split('-');
+    if(p.length===2){
+      const a=parseInt(p[0]),b=parseInt(p[1]);
+      if(!isNaN(a)&&!isNaN(b)){if(a>b)wins++;else losses++;}
+    }
+  });
+  return wins>losses;
+}
+
+function toggleRoundEdit(tid,round,e){
+  e.stopPropagation();
+  const key=tid+'_'+round;
+  openRoundKey=openRoundKey===key?null:key;
+  renderList();
+  setTimeout(()=>{
+    const el=document.getElementById('ri_res_'+tid+'_'+round);
+    if(el) el.focus();
+  },50);
+}
+
+function saveRound(tid,round){
+  const opp1=(document.getElementById('ri_opp1_'+tid+'_'+round)||{}).value||'';
+  const opp2=(document.getElementById('ri_opp2_'+tid+'_'+round)||{}).value||'';
+  const result=(document.getElementById('ri_res_'+tid+'_'+round)||{}).value||'';
+  if(!userData[tid]) userData[tid]={};
+  if(!userData[tid].results) userData[tid].results={};
+  userData[tid].results[round]={opp1:opp1.trim(),opp2:opp2.trim(),result:result.trim()};
+  openRoundKey=null;
+  saveToStorage();
+  renderList();
+  toast('✓ Resultado guardado');
+}
+
+// OPPONENT SEARCH
+function openSearchPage(){
+  document.getElementById('searchPage').classList.add('show');
+  setTimeout(()=>document.getElementById('oppSearchInput').focus(),200);
+}
+function closeSearchPage(){
+  document.getElementById('searchPage').classList.remove('show');
+  document.getElementById('oppSearchInput').value='';
+  document.getElementById('oppResults').innerHTML='<div class="empty" style="padding-top:40px"><big style="font-size:30px">🔍</big>Escreve um nome para pesquisar</div>';
+}
+
+function searchOpponent(q){
+  q=q.toLowerCase().trim();
+  const el=document.getElementById('oppResults');
+  if(q.length<2){el.innerHTML='<div class="empty" style="padding-top:40px"><big style="font-size:30px">🔍</big>Escreve pelo menos 2 letras</div>';return;}
+  
+  // Collect all matches
+  const matches=[];
+  tournaments.forEach(t=>{
+    const u=getU(t.id);
+    if(!u.results) return;
+    Object.entries(u.results).forEach(([round,res])=>{
+      if(!res.result) return;
+      const opp1=(res.opp1||'').toLowerCase();
+      const opp2=(res.opp2||'').toLowerCase();
+      if(opp1.includes(q)||opp2.includes(q)){
+        matches.push({t,round,res,u});
+      }
+    });
+  });
+
+  if(!matches.length){el.innerHTML='<div class="empty" style="padding-top:40px"><big style="font-size:30px">🎾</big>Nenhum resultado encontrado</div>';return;}
+
+  // Group by opponent name
+  const byOpp={};
+  matches.forEach(m=>{
+    const opp1=(m.res.opp1||'').toLowerCase();
+    const opp2=(m.res.opp2||'').toLowerCase();
+    const key=opp1.includes(q)?m.res.opp1:m.res.opp2;
+    const normKey=key.toLowerCase();
+    if(!byOpp[normKey]) byOpp[normKey]={name:key,matches:[]};
+    byOpp[normKey].matches.push(m);
+  });
+
+  let html='';
+  Object.values(byOpp).forEach(({name,matches})=>{
+    const wins=matches.filter(m=>isWinResult(m.res.result)).length;
+    const losses=matches.length-wins;
+    html+=`<div class="opp-group">
+<div class="opp-name">${name}</div>
+<div class="opp-stats">${matches.length} jogo${matches.length!==1?'s':''} · <span style="color:var(--gold-t)">${wins}V</span> <span style="color:var(--major)">${losses}D</span></div>`;
+    matches.sort((a,b)=>b.t.dateStart.localeCompare(a.t.dateStart)).forEach(m=>{
+      const win=isWinResult(m.res.result);
+      const opp=m.res.opp1&&m.res.opp2?m.res.opp1+' / '+m.res.opp2:(m.res.opp1||m.res.opp2||'');
+      const partnerStr=m.u.partner?` (c/ ${m.u.partner})`:'';
+      html+=`<div class="opp-match ${win?'win':'loss'}">
+<div class="opp-match-top">
+  <div class="opp-match-tourn">${m.t.name}</div>
+  <div class="opp-match-result ${win?'win':'loss'}">${m.res.result}</div>
+</div>
+<div class="opp-match-detail">${m.round} · ${d(m.t.dateStart)} · ${m.t.city}${partnerStr}</div>
+<div class="opp-match-detail" style="margin-top:2px">vs ${opp}</div>
+</div>`;
+    });
+    html+='</div>';
+  });
+  el.innerHTML=html;
+}
 
 // INTERACTIONS
 function toggleCard(id){openCardId=openCardId===id?null:id;renderList();if(openCardId){setTimeout(()=>{const e=document.getElementById('card-'+id);if(e)e.scrollIntoView({behavior:'smooth',block:'nearest'});},40);}}
