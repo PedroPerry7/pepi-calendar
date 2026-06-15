@@ -172,11 +172,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .confirm-btns{display:flex;gap:8px}
 .confirm-btns button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
 .confirm-btns .btn-confirm-del{background:rgba(200,64,64,0.2);color:#e07070;border-color:rgba(200,64,64,0.3)}
-
+ 
 /* RESULTS */
 .res-section{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
 .res-section-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
 .res-partner-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.res-prize-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.res-prize-row label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
+.res-prize-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;outline:none}
+.res-prize-input:focus{border-color:var(--gold)}
+.badge-prize{background:rgba(228,192,96,0.12);color:var(--gold);border:1px solid rgba(228,192,96,0.25)}
 .res-partner-row label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
 .res-partner-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;outline:none}
 .res-partner-input:focus{border-color:var(--gold)}
@@ -199,7 +204,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .round-save-btn{grid-column:1/-1;background:var(--gold);border:none;border-radius:6px;color:#000;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px;cursor:pointer;margin-top:2px}
 .round-save-btn:active{opacity:0.85}
 .round-sep{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);padding:4px 4px 0;letter-spacing:1px}
-
+ 
 /* SEARCH PAGE */
 .search-page{position:fixed;inset:0;background:var(--bg);z-index:150;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.3s cubic-bezier(0.34,1.1,0.64,1)}
 .search-page.show{transform:translateY(0)}
@@ -283,7 +288,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
   </button>
 </div>
-
+ 
 <!-- OPPONENT SEARCH PAGE -->
 <div class="search-page" id="searchPage">
   <div class="search-page-header">
@@ -301,7 +306,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
     </div>
   </div>
 </div>
-
+ 
 <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
   <div class="modal" id="modalBox">
     <div class="modal-title"><span id="modalTitle">Adicionar Torneio</span><button class="modal-close" onclick="closeModalDirect()">✕</button></div>
@@ -365,7 +370,7 @@ function tournamentInWeek(t,mon){
   const tEnd=new Date(t.dateEnd+'T23:59:59');
   return tStart<wEnd && tEnd>=mon;
 }
-
+ 
 // BASE DATA — 2025
 const BASE_2025=[
 {id:'25-pp-riyadh',y:2025,name:'Premier Padel Riyadh Season P1',city:'Riade',country:'KSA',tier:'p1',pts:1000,dateStart:'2025-02-10',dateEnd:'2025-02-15',qual:'2025-02-10',draw:'2025-02-12'},
@@ -407,7 +412,7 @@ const BASE_2025=[
 {id:'25-fpp-masters-sep',y:2025,name:'FPP Open Setembro',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2025-09-27',dateEnd:'2025-09-28',draw:'2025-09-27',fpp:true},
 {id:'25-fpp-masters-nov',y:2025,name:'FPP Masters Final',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2025-11-29',dateEnd:'2025-11-30',draw:'2025-11-29',fpp:true},
 ];
-
+ 
 // BASE DATA — 2026 Premier Padel
 const BASE_PP_2026=[
 {id:'26-pp-riyadh',y:2026,name:'Premier Padel Riyadh Season P1',city:'Riade',country:'KSA',tier:'p1',pts:1000,dateStart:'2026-02-07',dateEnd:'2026-02-14',qual:'2026-02-07',draw:'2026-02-09'},
@@ -437,7 +442,7 @@ const BASE_PP_2026=[
 {id:'26-pp-mexico',y:2026,name:'Premier Padel Mexico Major',city:'Acapulco',country:'MEX',tier:'major',pts:2000,dateStart:'2026-11-23',dateEnd:'2026-11-29',qual:'2026-11-23',draw:'2026-11-23'},
 {id:'26-pp-finals',y:2026,name:'Premier Padel Finals Barcelona',city:'Barcelona',country:'ESP',tier:'p1',pts:1500,dateStart:'2026-12-07',dateEnd:'2026-12-13',qual:'2026-12-07',draw:'2026-12-07'},
 ];
-
+ 
 // BASE DATA — 2026 FPP
 const BASE_FPP_2026=[
 {id:'26-fpp-gold-acores',y:2026,name:'FIP Gold Açores',city:'Açores – São Miguel',country:'POR',tier:'gold',pts:150,dateStart:'2026-03-02',dateEnd:'2026-03-08',qual:'2026-03-02',draw:'2026-03-04',fpp:true},
@@ -473,7 +478,7 @@ const BASE_FPP_2026=[
 {id:'26-fpp-final-liga',y:2026,name:'Final Liga de Clubes Absolutos FPP',city:'Porto',country:'POR',tier:'nat',pts:0,dateStart:'2026-11-19',dateEnd:'2026-11-22',draw:'2026-11-19',fpp:true},
 {id:'26-fpp-masters-final',y:2026,name:'🏆 Masters Final FPP Absoluto',city:'Paredes',country:'POR',tier:'fpp',pts:0,dateStart:'2026-11-27',dateEnd:'2026-11-29',draw:'2026-11-27',fpp:true},
 ];
-
+ 
 // BASE DATA — 2026 FIP Tour (complete, from official document)
 const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-bronze-melbourne-padel-open-07012026',y:2026,name:'FIP Bronze Melbourne Padel Open',city:'Melbourne',country:'AUS',tier:'bronze',pts:40,dateStart:'2026-01-07',dateEnd:'2026-01-11',qual:null,draw:'2026-01-07',fpp:false},
@@ -719,9 +724,9 @@ const BASE_FIP_TOUR_2026=[
 {id:'26t-fip-bronze-comunidad-valenciana-ix-23112026',y:2026,name:'FIP Bronze Comunidad Valenciana Ix',city:'Tbd',country:'ESP',tier:'bronze',pts:40,dateStart:'2026-11-23',dateEnd:'2026-11-29',qual:null,draw:'2026-11-23',fpp:false},
 {id:'26t-fip-bronze-phuket-ii-23112026',y:2026,name:'FIP Bronze Phuket Ii',city:'Phuket',country:'THA',tier:'bronze',pts:40,dateStart:'2026-11-23',dateEnd:'2026-11-29',qual:null,draw:'2026-11-23',fpp:false}
 ];
-
+ 
 const BASE=[...BASE_2025,...BASE_PP_2026,...BASE_FPP_2026,...BASE_FIP_TOUR_2026];
-
+ 
 // STATE
 let tournaments=[...BASE];
 let userTournaments=[];
@@ -732,12 +737,12 @@ let openCardId=null;
 let editingId=null;
 let deleteTargetId=null;
 let activeWeekMonday=null; // null = all weeks
-
+ 
 // STORAGE — Supabase sync
 const SUPA_URL='https://pomhhgfxewbqqwmlzjql.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvbWhoZ2Z4ZXdicXF3bWx6anFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA5NDY3MzksImV4cCI6MjA5NjUyMjczOX0.1Q_ZgWbKghYy1yYNz-_aWdSO7y1teAmaPFubcrqrJEE';
 const DEVICE_ID=(()=>{let d=localStorage.getItem('pepi_device_id');if(!d){d='dev_'+Math.random().toString(36).slice(2,10);localStorage.setItem('pepi_device_id',d);}return d;})();
-
+ 
 async function supaFetch(method, body=null){
   const opts={method,headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'resolution=merge-duplicates'}};
   if(body) opts.body=JSON.stringify(body);
@@ -746,7 +751,7 @@ async function supaFetch(method, body=null){
   if(!r.ok) throw new Error('Supabase '+r.status);
   return method==='GET'?r.json():r;
 }
-
+ 
 async function loadFromStorage(){
   setSyncStatus('syncing','A carregar...');
   try{
@@ -777,7 +782,7 @@ async function loadFromStorage(){
   }
   rebuildList();renderStats();renderList();
 }
-
+ 
 let saveTimer=null;
 async function saveToStorage(){
   // Debounce — wait 800ms after last change before saving
@@ -798,16 +803,16 @@ async function saveToStorage(){
     }
   },800);
 }
-
+ 
 function loadLocal(){try{const d=JSON.parse(localStorage.getItem('pepi_v5_data')||'{}');userData=d.userData||{};userTournaments=d.userTournaments||[];}catch(e){}}
 function saveLocal(){try{localStorage.setItem('pepi_v5_data',JSON.stringify({userData,userTournaments}));}catch(e){}}
 function setSyncStatus(s,m){document.getElementById('syncDot').className='sync-dot '+s;document.getElementById('syncLabel').textContent=m;}
 function getU(id){return userData[id]||{};}
 function setU(id,k,v){if(!userData[id])userData[id]={};userData[id][k]=v;saveToStorage();}
 function setUObj(id,o){userData[id]={...(userData[id]||{}),...o};saveToStorage();}
-
+ 
 function rebuildList(){tournaments=[...BASE,...userTournaments];}
-
+ 
 // WEEK
 function shiftWeek(n){
   if(!activeWeekMonday){
@@ -825,7 +830,7 @@ function updateWeekUI(){
   if(activeWeekMonday){lbl.textContent=fmtWeek(activeWeekMonday);lbl.classList.add('active-week');btn.classList.add('on');}
   else{lbl.textContent='Todas as semanas';lbl.classList.remove('active-week');btn.classList.remove('on');}
 }
-
+ 
 // FILTER
 function filteredList(){
   const q=document.getElementById('searchInput').value.toLowerCase().trim();
@@ -842,7 +847,7 @@ function filteredList(){
     return t.tier===activeFilter;
   });
 }
-
+ 
 // RENDER
 function renderStats(){
   const all=tournaments.filter(t=>t.y===activeYear);
@@ -850,9 +855,10 @@ function renderStats(){
   const starred=all.filter(t=>getU(t.id).starred).length;
   const pp=all.filter(t=>['major','p1','p2'].includes(t.tier)).length;
   const fipT=all.filter(t=>['platinum','gold','silver','bronze'].includes(t.tier)).length;
-  document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div>`;
+  const totalPrize=all.reduce((sum,t)=>sum+(getU(t.id).prize||0),0);
+  document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div>${totalPrize>0?`<div class="stat"><div class="stat-n" style="color:var(--gold)">${totalPrize}€</div><div class="stat-l">Prize Money</div></div>`:''}`;
 }
-
+ 
 // Relevance order for sorting within a week
 const TIER_RANK={champ:1,nat:2,p1:3,major:4,p2:5,platinum:6,gold:7,silver:8,bronze:9,fpp:10};
 function tierRank(t){
@@ -884,13 +890,13 @@ function tierRank(t){
   }
   return 18;
 }
-
+ 
 function getWeekKey(dateEnd){
   // Week is determined by the Monday of the week the end date falls in
   const mon = getMonday(new Date(dateEnd+'T12:00:00'));
   return mon.toISOString().slice(0,10);
 }
-
+ 
 function fmtWeekGroup(weekKey){
   const mon = new Date(weekKey+'T12:00:00');
   const sun = addDays(mon,6);
@@ -900,7 +906,7 @@ function fmtWeekGroup(weekKey){
   }
   return `${mon.getDate()} ${MONTHS[mon.getMonth()].toUpperCase()} – ${sun.getDate()} ${MONTHS[sun.getMonth()].toUpperCase()} ${sun.getFullYear()}`;
 }
-
+ 
 function renderList(){
   const list=filteredList();
   const el=document.getElementById('mainContent');
@@ -932,7 +938,7 @@ function renderList(){
   });
   el.innerHTML=html;
 }
-
+ 
 function renderCard(t){
   const u=getU(t.id);
   const isOpen=openCardId===t.id;
@@ -940,6 +946,7 @@ function renderCard(t){
   const col=`var(${TIER_COL[t.tier]||'--muted'})`;
   let xb='';
   if(u.partner)xb+=`<span class="badge badge-partner">👤 ${u.partner}</span>`;
+  if(u.prize)xb+=`<span class="badge badge-prize">💰 ${u.prize}€</span>`;
   if(u.status==='confirmado')xb+='<span class="badge badge-go">✓ GO</span>';
   else if(u.status==='tentativo')xb+='<span class="badge badge-maybe">? Talvez</span>';
   else if(u.status==='nao-vou')xb+='<span class="badge badge-no">✗ Não</span>';
@@ -957,7 +964,7 @@ function renderCard(t){
 </div>
 ${isOpen?renderExpanded(t,u):''}
 </div>`;}
-
+ 
 function renderExpanded(t,u){
   const rounds=getRounds(t.tier);
   const results=u.results||{};
@@ -994,7 +1001,7 @@ ${isRoundOpen?`<div class="round-inputs">
 </div>`:''}
 </div>`;
   });
-
+ 
   return `<div class="t-expanded">
 <div class="exp-grid">
 <div class="exp-field"><label>Vou jogar?</label>
@@ -1019,6 +1026,11 @@ ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div c
     <input class="res-partner-input" type="text" placeholder="ex: Fazendeiro" value="${partner}"
       onchange="setPartner('${t.id}',this.value)" autocomplete="off">
   </div>
+  <div class="res-prize-row">
+    <label>PRIZE €</label>
+    <input class="res-prize-input" type="number" min="0" step="1" placeholder="ex: 500" value="${u.prize||''}"
+      onchange="setPrize('${t.id}',this.value)" autocomplete="off">
+  </div>
   <div class="rounds-list">${roundsHtml}</div>
 </div>
 <textarea class="exp-notes" placeholder="Notas — hotel, voo, contactos..." onchange="setNotes('${t.id}',this.value)">${u.notes||''}</textarea>
@@ -1026,8 +1038,8 @@ ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div c
 <button class="btn-edit" onclick="openEditModal('${t.id}')">✎ Editar</button>
 <button class="btn-del" onclick="askDelete('${t.id}')">🗑 Apagar</button>
 </div></div>`;}
-
-
+ 
+ 
 const TIER_ROUNDS = {
   major:    {qual:['Q1','Q2','Last Q'], main:['R64','R32','R16','QF','SF','F']},
   p1:       {qual:['Q1','Q2','Last Q'], main:['R64','R32','R16','QF','SF','F']},
@@ -1044,10 +1056,10 @@ function getRounds(tier){
   const r=TIER_ROUNDS[tier]||TIER_ROUNDS.bronze;
   return [...r.qual.map(x=>({r:x,q:true})),...r.main.map(x=>({r:x,q:false}))];
 }
-
+ 
 // ROUND RESULTS
 let openRoundKey=null;
-
+ 
 function isWinResult(result){
   if(!result) return false;
   const sets=result.trim().split(/\s+/);
@@ -1061,7 +1073,7 @@ function isWinResult(result){
   });
   return wins>losses;
 }
-
+ 
 function toggleRoundEdit(tid,round,e){
   e.stopPropagation();
   const key=tid+'_'+round;
@@ -1072,7 +1084,7 @@ function toggleRoundEdit(tid,round,e){
     if(el) el.focus();
   },50);
 }
-
+ 
 function saveRound(tid,round){
   const opp1=(document.getElementById('ri_opp1_'+tid+'_'+round)||{}).value||'';
   const opp2=(document.getElementById('ri_opp2_'+tid+'_'+round)||{}).value||'';
@@ -1085,7 +1097,7 @@ function saveRound(tid,round){
   renderList();
   toast('✓ Resultado guardado');
 }
-
+ 
 // OPPONENT SEARCH
 function openSearchPage(){
   document.getElementById('searchPage').classList.add('show');
@@ -1096,7 +1108,7 @@ function closeSearchPage(){
   document.getElementById('oppSearchInput').value='';
   document.getElementById('oppResults').innerHTML='<div class="empty" style="padding-top:40px"><big style="font-size:30px">🔍</big>Escreve um nome para pesquisar</div>';
 }
-
+ 
 function searchOpponent(q){
   q=q.toLowerCase().trim();
   const el=document.getElementById('oppResults');
@@ -1116,9 +1128,9 @@ function searchOpponent(q){
       }
     });
   });
-
+ 
   if(!matches.length){el.innerHTML='<div class="empty" style="padding-top:40px"><big style="font-size:30px">🎾</big>Nenhum resultado encontrado</div>';return;}
-
+ 
   // Group by opponent name
   const byOpp={};
   matches.forEach(m=>{
@@ -1129,7 +1141,7 @@ function searchOpponent(q){
     if(!byOpp[normKey]) byOpp[normKey]={name:key,matches:[]};
     byOpp[normKey].matches.push(m);
   });
-
+ 
   let html='';
   Object.values(byOpp).forEach(({name,matches})=>{
     const wins=matches.filter(m=>isWinResult(m.res.result)).length;
@@ -1154,16 +1166,17 @@ function searchOpponent(q){
   });
   el.innerHTML=html;
 }
-
+ 
 // INTERACTIONS
 function toggleCard(id){openCardId=openCardId===id?null:id;renderList();if(openCardId){setTimeout(()=>{const e=document.getElementById('card-'+id);if(e)e.scrollIntoView({behavior:'smooth',block:'nearest'});},40);}}
 function toggleStar(e,id){e.stopPropagation();const on=!getU(id).starred;setU(id,'starred',on);renderList();renderStats();toast(on?'⭐ Favorito':'Removido');}
 function setStatus(id,v){setUObj(id,{status:v});renderList();renderStats();}
 function setPartner(id,v){setU(id,'partner',v.trim());renderList();}
+function setPrize(id,v){const n=parseFloat(v);setU(id,'prize',isNaN(n)?null:n);renderList();renderStats();}
 function setNotes(id,v){setU(id,'notes',v);}
 function setYear(y,el){activeYear=y;document.querySelectorAll('.year-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');openCardId=null;activeWeekMonday=null;updateWeekUI();renderStats();renderList();}
 function setFilter(f,el){activeFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderList();}
-
+ 
 // MODAL
 function openAddModal(){editingId=null;document.getElementById('modalTitle').textContent='Adicionar Torneio';['mName','mCity','mNotes','mPartner'].forEach(id=>document.getElementById(id).value='');document.getElementById('mCountry').value='POR';document.getElementById('mTier').value='silver';document.getElementById('mPts').value='';document.getElementById('mStart').value=`${activeYear}-01-01`;document.getElementById('mEnd').value=`${activeYear}-01-03`;document.getElementById('mQual').value='';document.getElementById('mDraw').value=`${activeYear}-01-01`;document.getElementById('mStatus').value='';document.getElementById('modalOverlay').classList.add('show');}
 function openEditModal(id){const t=tournaments.find(x=>x.id===id);if(!t)return;const u=getU(id);editingId=id;document.getElementById('modalTitle').textContent='Editar Torneio';document.getElementById('mName').value=t.name;document.getElementById('mCity').value=t.city;document.getElementById('mCountry').value=t.country;document.getElementById('mTier').value=t.tier;document.getElementById('mPts').value=t.pts||'';
@@ -1197,23 +1210,23 @@ function saveModal(){
   }
   saveToStorage();rebuildList();renderStats();renderList();closeModalDirect();
 }
-
+ 
 // DELETE
 function askDelete(id){const t=tournaments.find(x=>x.id===id);deleteTargetId=id;const isBase=BASE.find(x=>x.id===id);document.getElementById('confirmMsg').textContent=isBase?`Repor "${t.name}" para valores originais?`:`Apagar "${t.name}"?`;document.getElementById('confirmBox').classList.add('show');}
 function closeConfirm(){document.getElementById('confirmBox').classList.remove('show');deleteTargetId=null;}
 function confirmDelete(){if(!deleteTargetId){closeConfirm();return;}const id=deleteTargetId;const isBase=BASE.find(x=>x.id===id);if(isBase){delete userData[id];const t=tournaments.find(x=>x.id===id);if(t)Object.assign(t,isBase);toast('Reposto');}else{userTournaments=userTournaments.filter(x=>x.id!==id);delete userData[id];toast('Apagado');}saveToStorage();rebuildList();renderStats();renderList();openCardId=null;closeConfirm();}
-
+ 
 // REFRESH / SYNC
 async function doRefresh(){const btn=document.getElementById('btnRefresh');btn.classList.add('spinning');btn.disabled=true;toast('🔄 A atualizar...');await new Promise(r=>setTimeout(r,1200));rebuildList();renderStats();renderList();btn.classList.remove('spinning');btn.disabled=false;toast('✓ Calendário atualizado — '+new Date().toLocaleDateString('pt-PT'));}
 async function doSync(){setSyncStatus('syncing','A sincronizar...');toast('🔄 A sincronizar...');await saveToStorage();toast('✓ Sincronizado');}
-
+ 
 // EXCEL EXPORT
 function exportExcel(){
   const list = filteredList();
   if(!list.length){toast('Nenhum torneio para exportar');return;}
   
   const rows = [
-    ['Favorito','Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','FPP','Notas']
+    ['Favorito','Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','Prize €','FPP','Notas']
   ];
   
   list.forEach(t => {
@@ -1232,11 +1245,12 @@ function exportExcel(){
       t.draw || t.dateStart,
       u.status === 'confirmado' ? 'Confirmado' : u.status === 'tentativo' ? 'Tentativo' : u.status === 'nao-vou' ? 'Não vou' : '',
       u.partner || '',
+      u.prize || '',
       t.fpp ? 'Sim' : '',
       u.notes || ''
     ]);
   });
-
+ 
   // Build CSV with BOM for Excel UTF-8
   const bom = '\uFEFF';
   const csv = bom + rows.map(r => 
@@ -1247,7 +1261,7 @@ function exportExcel(){
         : s;
     }).join(';')  // semicolon for European Excel
   ).join('\r\n');
-
+ 
   const blob = new Blob([csv], {type: 'text/csv;charset=utf-8'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
@@ -1261,11 +1275,11 @@ function exportExcel(){
   URL.revokeObjectURL(url);
   toast('✓ Excel exportado — ' + list.length + ' torneios');
 }
-
+ 
 // TOAST
 let toastT;
 function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove('show'),2400);}
-
+ 
 // INIT
 setSyncStatus('syncing','A carregar...');
 loadFromStorage();
