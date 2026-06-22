@@ -173,6 +173,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .confirm-btns button{flex:1;padding:11px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer}
 .confirm-btns .btn-confirm-del{background:rgba(200,64,64,0.2);color:#e07070;border-color:rgba(200,64,64,0.3)}
 
+/* RANKING POINTS */
+.ranking-bar{background:var(--bg3);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between}
+.ranking-total{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--gold)}
+.ranking-label{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);margin-top:1px}
+.ranking-breakdown{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.ranking-breakdown::-webkit-scrollbar{display:none}
+.rank-item{flex-shrink:0;text-align:right}
+.rank-item-pts{font-family:'DM Mono',monospace;font-size:13px;font-weight:500;color:var(--text)}
+.rank-item-lbl{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted)}
+.rank-item-exp{font-family:'DM Mono',monospace;font-size:9px;color:var(--major)}
+.badge-rankpts{background:rgba(126,207,255,0.12);color:var(--platinum);border:1px solid rgba(126,207,255,0.2)}
+.badge-hist{background:rgba(106,114,144,0.12);color:var(--muted2);border:1px solid rgba(106,114,144,0.2)}
 /* RESULTS */
 .res-section{margin-top:12px;border-top:1px solid var(--border);padding-top:10px}
 .res-section-title{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
@@ -282,6 +294,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   </div>
 </header>
 <div class="sync-row"><div class="sync-dot" id="syncDot"></div><span id="syncLabel">A carregar...</span></div>
+<div id="rankingBar" style="display:none"></div>
 <div class="stats-bar" id="statsBar"></div>
 <div class="search-wrap">
   <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="13" height="13"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -414,6 +427,19 @@ const BASE_2025=[
 {id:'25-fpp-masters-jun',y:2025,name:'FPP Masters Final 2025',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2025-06-28',dateEnd:'2025-06-29',draw:'2025-06-28',fpp:true},
 {id:'25-fpp-masters-sep',y:2025,name:'FPP Open Setembro',city:'Lisboa',country:'POR',tier:'fpp',pts:0,dateStart:'2025-09-27',dateEnd:'2025-09-28',draw:'2025-09-27',fpp:true},
 {id:'25-fpp-masters-nov',y:2025,name:'FPP Masters Final',city:'Porto',country:'POR',tier:'fpp',pts:0,dateStart:'2025-11-29',dateEnd:'2025-11-30',draw:'2025-11-29',fpp:true},
+// HISTORICAL RECORDS 2025 (points tracking)
+{id:'hist-crete-20251121',y:2025,name:'FIP Bronze Lyttos III',city:'Creta',country:'GRE',tier:'bronze',pts:40,dateStart:'2025-11-21',dateEnd:'2025-11-23',draw:'2025-11-21',fpp:false,hist:true},
+{id:'hist-oporto-nov-20251112',y:2025,name:'FIP Silver Bioniq',city:'Porto',country:'POR',tier:'silver',pts:80,dateStart:'2025-11-12',dateEnd:'2025-11-16',draw:'2025-11-12',fpp:true,hist:true},
+{id:'hist-piacenza-20251008',y:2025,name:'FIP Bronze Confapi Piacenza',city:'Piacenza',country:'ITA',tier:'bronze',pts:40,dateStart:'2025-10-08',dateEnd:'2025-10-12',draw:'2025-10-08',fpp:false,hist:true},
+{id:'hist-almeirim-2025-20251002',y:2025,name:'FIP Bronze Almeirim 2025',city:'Almeirim',country:'POR',tier:'bronze',pts:40,dateStart:'2025-10-02',dateEnd:'2025-10-05',draw:'2025-10-02',fpp:true,hist:true},
+{id:'hist-lisboa-2025-20250917',y:2025,name:'FIP Silver Lisboa Racket Centre',city:'Lisboa',country:'POR',tier:'silver',pts:80,dateStart:'2025-09-17',dateEnd:'2025-09-21',draw:'2025-09-17',fpp:true,hist:true},
+{id:'hist-guimaraes-2025-20250910',y:2025,name:'FIP Silver Guimaraes 2025',city:'Guimarães',country:'POR',tier:'silver',pts:80,dateStart:'2025-09-10',dateEnd:'2025-09-14',draw:'2025-09-10',fpp:true,hist:true},
+{id:'hist-oeiras-2025-20250903',y:2025,name:'FIP Silver Beefeater 0.0',city:'Oeiras',country:'POR',tier:'silver',pts:80,dateStart:'2025-09-03',dateEnd:'2025-09-07',draw:'2025-09-03',fpp:true,hist:true},
+{id:'hist-belgrade-2025-20250820',y:2025,name:'FIP Silver Belgrade 2025',city:'Belgrado',country:'SRB',tier:'silver',pts:80,dateStart:'2025-08-20',dateEnd:'2025-08-24',draw:'2025-08-20',fpp:false,hist:true},
+{id:'hist-vilamoura-2025-20250813',y:2025,name:'FIP Bronze Vilamoura Summer Cup 2025',city:'Vilamoura',country:'POR',tier:'bronze',pts:40,dateStart:'2025-08-13',dateEnd:'2025-08-17',draw:'2025-08-13',fpp:true,hist:true},
+{id:'hist-portimao-2025-20250805',y:2025,name:'FIP Silver Portimao 2025',city:'Portimão',country:'POR',tier:'silver',pts:80,dateStart:'2025-08-05',dateEnd:'2025-08-10',draw:'2025-08-05',fpp:true,hist:true},
+{id:'hist-oporto-jul-2025-20250722',y:2025,name:'FIP Silver Mimosa Oporto 2025',city:'Porto',country:'POR',tier:'silver',pts:80,dateStart:'2025-07-22',dateEnd:'2025-07-27',draw:'2025-07-22',fpp:true,hist:true},
+{id:'hist-aveiro-2025-20250716',y:2025,name:'FIP Bronze Aveiro 2025',city:'Aveiro',country:'POR',tier:'bronze',pts:40,dateStart:'2025-07-16',dateEnd:'2025-07-20',draw:'2025-07-16',fpp:true,hist:true},
 ];
 
 // BASE DATA — 2026 Premier Padel
@@ -444,6 +470,8 @@ const BASE_PP_2026=[
 {id:'26-pp-dubai',y:2026,name:'Premier Padel Dubai P1',city:'Dubai',country:'UAE',tier:'p1',pts:1000,dateStart:'2026-11-09',dateEnd:'2026-11-15',qual:'2026-11-09',draw:'2026-11-09'},
 {id:'26-pp-mexico',y:2026,name:'Premier Padel Mexico Major',city:'Acapulco',country:'MEX',tier:'major',pts:2000,dateStart:'2026-11-23',dateEnd:'2026-11-29',qual:'2026-11-23',draw:'2026-11-23'},
 {id:'26-pp-finals',y:2026,name:'Premier Padel Finals Barcelona',city:'Barcelona',country:'ESP',tier:'p1',pts:1500,dateStart:'2026-12-07',dateEnd:'2026-12-13',qual:'2026-12-07',draw:'2026-12-07'},
+// HISTORICAL RECORDS 2026 (points tracking)
+{id:'hist-sevilla-20260415',y:2026,name:'FIP Bronze Icónico Sports Sevilla',city:'Sevilha',country:'ESP',tier:'bronze',pts:40,dateStart:'2026-04-15',dateEnd:'2026-04-20',draw:'2026-04-15',fpp:false,hist:true},
 ];
 
 // BASE DATA — 2026 FPP
@@ -775,6 +803,12 @@ async function loadFromStorage(){
     loadLocal();
     setSyncStatus('error','Offline — dados locais');
   }
+  // Pre-load ranking points if not already set
+  Object.entries(PRELOAD_RANKPTS).forEach(([tid,data])=>{
+    if(!userData[tid]) userData[tid]={};
+    if(!userData[tid].rankPts) userData[tid].rankPts=data.rankPts;
+    if(!userData[tid].rankDate) userData[tid].rankDate=data.rankDate;
+  });
   // Pre-load known results if not already present
   const ljId='26t-fip-bronze-slovenia-09062026';
   if(!userData[ljId]) userData[ljId]={};
@@ -784,7 +818,7 @@ async function loadFromStorage(){
     userData[ljId].partner='Antonio Luque';
     userData[ljId].starred=true;
   }
-  rebuildList();renderStats();renderList();
+  rebuildList();renderStats();renderRanking();renderList();
 }
 
 let saveTimer=null;
@@ -865,6 +899,30 @@ function filteredList(){
 }
 
 // RENDER
+function rankingExpiry(dateStr){
+  const d=new Date(dateStr+'T12:00:00');
+  d.setFullYear(d.getFullYear()+1);
+  d.setDate(d.getDate()+7);
+  return d;
+}
+function calcTotalRankPts(){
+  const today=new Date();
+  let total=0;
+  tournaments.forEach(t=>{
+    const u=getU(t.id);
+    if(u.rankPts&&u.rankPts>0){
+      const dateRef=u.rankDate||t.dateStart;
+      if(rankingExpiry(dateRef)>today) total+=u.rankPts;
+    }
+  });
+  return total;
+}
+function renderRanking(){
+  const total=calcTotalRankPts();
+  document.getElementById('rankingTotal').textContent=total;
+  document.getElementById('rankingBar').style.display=total>0?'flex':'none';
+}
+
 function renderStats(){
   const all=tournaments.filter(t=>t.y===activeYear);
   const confirmed=all.filter(t=>getU(t.id).status==='confirmado').length;
@@ -872,7 +930,8 @@ function renderStats(){
   const pp=all.filter(t=>['major','p1','p2'].includes(t.tier)).length;
   const fipT=all.filter(t=>['platinum','gold','silver','bronze'].includes(t.tier)).length;
   const totalPrize=all.reduce((sum,t)=>sum+(getU(t.id).prize||0),0);
-  document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div>${totalPrize>0?`<div class="stat"><div class="stat-n" style="color:var(--gold)">${totalPrize}€</div><div class="stat-l">Prize Money</div></div>`:''}`;
+  const rankPts=calcTotalRankPts();
+  document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div>${rankPts>0?`<div class="stat" style="min-width:64px"><div class="stat-n" style="color:var(--platinum)">${rankPts}</div><div class="stat-l">Pontos FIP</div></div>`:''} ${totalPrize>0?`<div class="stat"><div class="stat-n" style="color:var(--gold)">${totalPrize}€</div><div class="stat-l">Prize Money</div></div>`:''}`;
 }
 
 // Relevance order for sorting within a week
@@ -963,6 +1022,8 @@ function renderCard(t){
   let xb='';
   if(u.partner)xb+=`<span class="badge badge-partner">👤 ${u.partner}</span>`;
   if(u.prize)xb+=`<span class="badge badge-prize">💰 ${u.prize}€</span>`;
+  if(u.rankPts)xb+=`<span class="badge badge-rankpts">🏆 ${u.rankPts}pts</span>`;
+  if(t.hist)xb+=`<span class="badge badge-hist">histórico</span>`;
   if(u.status==='confirmado')xb+='<span class="badge badge-go">✓ GO</span>';
   else if(u.status==='tentativo')xb+='<span class="badge badge-maybe">? Talvez</span>';
   else if(u.status==='nao-vou')xb+='<span class="badge badge-no">✗ Não</span>';
@@ -1047,6 +1108,11 @@ ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div c
     <input class="res-prize-input" type="number" min="0" step="1" placeholder="ex: 500" value="${u.prize||''}"
       onchange="setPrize('${t.id}',this.value)" autocomplete="off">
   </div>
+  <div class="res-prize-row">
+    <label>PTS FIP</label>
+    <input class="res-prize-input" type="number" min="0" step="1" placeholder="ex: 25" value="${u.rankPts||''}"
+      onchange="setRankPts('${t.id}',this.value)" autocomplete="off">
+  </div>
   <div class="rounds-list">${roundsHtml}</div>
 </div>
 <textarea class="exp-notes" placeholder="Notas — hotel, voo, contactos..." onchange="setNotes('${t.id}',this.value)">${u.notes||''}</textarea>
@@ -1056,6 +1122,7 @@ ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div c
 </div></div>`;}
 
 
+const PRELOAD_RANKPTS={"26-fpp-plat-paredes": {"rankPts": 17, "rankDate": "2026-06-15"}, "26t-fip-bronze-slovenia-09062026": {"rankPts": 22, "rankDate": "2026-06-09"}, "26-plat-albania": {"rankPts": 9, "rankDate": "2026-05-24"}, "26-pp-baires": {"rankPts": 18, "rankDate": "2026-05-10"}, "26-fpp-silver-leiria": {"rankPts": 25, "rankDate": "2026-04-29"}, "hist-sevilla-20260415": {"rankPts": 3, "rankDate": "2026-04-15"}, "26-bronze-norway": {"rankPts": 40, "rankDate": "2026-04-09"}, "26-fpp-silver-viseu": {"rankPts": 8, "rankDate": "2026-03-24"}, "26-silver-mediolanum-parma": {"rankPts": 45, "rankDate": "2026-03-17"}, "26-fpp-bronze-madeira": {"rankPts": 8, "rankDate": "2026-02-01"}, "hist-crete-20251121": {"rankPts": 8, "rankDate": "2025-11-21"}, "hist-oporto-nov-20251112": {"rankPts": 25, "rankDate": "2025-11-12"}, "hist-piacenza-20251008": {"rankPts": 40, "rankDate": "2025-10-08"}, "hist-almeirim-2025-20251002": {"rankPts": 22, "rankDate": "2025-10-02"}, "hist-lisboa-2025-20250917": {"rankPts": 8, "rankDate": "2025-09-17"}, "hist-guimaraes-2025-20250910": {"rankPts": 5, "rankDate": "2025-09-10"}, "hist-oeiras-2025-20250903": {"rankPts": 14, "rankDate": "2025-09-03"}, "hist-belgrade-2025-20250820": {"rankPts": 5, "rankDate": "2025-08-20"}, "hist-vilamoura-2025-20250813": {"rankPts": 8, "rankDate": "2025-08-13"}, "hist-portimao-2025-20250805": {"rankPts": 5, "rankDate": "2025-08-05"}, "hist-oporto-jul-2025-20250722": {"rankPts": 5, "rankDate": "2025-07-22"}, "hist-aveiro-2025-20250716": {"rankPts": 8, "rankDate": "2025-07-16"}};
 const TIER_ROUNDS = {
   major:    {qual:['Q1','Q2','Last Q'], main:['R64','R32','R16','QF','SF','F']},
   p1:       {qual:['Q1','Q2','Last Q'], main:['R64','R32','R16','QF','SF','F']},
@@ -1189,6 +1256,7 @@ function toggleStar(e,id){e.stopPropagation();const on=!getU(id).starred;setU(id
 function setStatus(id,v){setUObj(id,{status:v});renderList();renderStats();}
 function setPartner(id,v){setU(id,'partner',v.trim());renderList();}
 function setPrize(id,v){const n=parseFloat(v);setU(id,'prize',isNaN(n)?null:n);renderList();renderStats();}
+function setRankPts(id,v){const n=parseInt(v);setU(id,'rankPts',isNaN(n)?null:n);renderList();renderRanking();}
 function setNotes(id,v){setU(id,'notes',v);}
 function setYear(y,el){activeYear=y;document.querySelectorAll('.year-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');openCardId=null;activeWeekMonday=null;updateWeekUI();renderStats();renderList();}
 function setFilter(f,el){activeFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderList();}
