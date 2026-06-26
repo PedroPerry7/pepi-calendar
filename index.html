@@ -1238,7 +1238,10 @@ async function doSync(){setSyncStatus('syncing','A sincronizar...');toast('🔄 
 
 // EXCEL EXPORT
 function exportExcel(){
-  const list = filteredList();
+  // Export ALL tournaments of the active year (ignore screen filters) so the
+  // CSV is always a complete backup including past tournaments and history.
+  const list = tournaments.filter(t => t.y === activeYear)
+    .sort((a,b) => a.dateStart.localeCompare(b.dateStart));
   if(!list.length){toast('Nenhum torneio para exportar');return;}
   
   const rows = [
