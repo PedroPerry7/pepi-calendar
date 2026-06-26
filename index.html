@@ -181,6 +181,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .res-prize-row label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
 .res-prize-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;outline:none}
 .res-prize-input:focus{border-color:var(--gold)}
+.badge-rankpts{background:rgba(126,207,255,0.12);color:var(--platinum);border:1px solid rgba(126,207,255,0.2)}
+.stat-sep{flex-shrink:0;width:2px;background:var(--gold);opacity:0.4;align-self:stretch;margin:6px 4px}
+.stat.stat-rank{min-width:70px;background:rgba(126,207,255,0.06)}
 .badge-prize{background:rgba(228,192,96,0.12);color:var(--gold);border:1px solid rgba(228,192,96,0.25)}
 .res-partner-row label{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;white-space:nowrap}
 .res-partner-input{flex:1;background:var(--bg2);border:1px solid var(--border2);border-radius:6px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;padding:6px 9px;outline:none}
@@ -775,6 +778,57 @@ async function loadFromStorage(){
     loadLocal();
     setSyncStatus('error','Offline — dados locais');
   }
+  // Pre-load known ranking points (best-22 history) if not already set by user.
+  // rankDate = tournament date, used for the 52-week expiry calculation.
+  const RANK_HISTORY={
+    '26t-fip-platinum-lusitania-portugal-master-p-15062026':{rankPts:17,rankDate:'2026-06-15'},
+    '26t-fip-bronze-slovenia-09062026':{rankPts:22,rankDate:'2026-06-09'},
+    '26t-fip-platinum-albania-24052026':{rankPts:9,rankDate:'2026-05-24'},
+    '26-pp-baires':{rankPts:18,rankDate:'2026-05-10'},
+    '26t-fip-silver-leiria-master-padel-29042026':{rankPts:25,rankDate:'2026-04-29'},
+    '26t-fip-bronze-ic-nico-sports-15042026':{rankPts:3,rankDate:'2026-04-15'},
+    '26t-fip-bronze-s4sport-open-09042026':{rankPts:40,rankDate:'2026-04-09'},
+    '26t-fip-bronze-viseu-24032026':{rankPts:8,rankDate:'2026-03-24'},
+    '26t-fip-silver-mediolanum-padel-cup-17032026':{rankPts:45,rankDate:'2026-03-17'},
+    '26t-fip-bronze-madeira-01022026':{rankPts:8,rankDate:'2026-02-01'},
+    'hist-crete-20251121':{rankPts:8,rankDate:'2025-11-21'},
+    'hist-oporto-bioniq-20251112':{rankPts:25,rankDate:'2025-11-12'},
+    'hist-piacenza-20251008':{rankPts:40,rankDate:'2025-10-08'},
+    'hist-almeirim-20251002':{rankPts:22,rankDate:'2025-10-02'},
+    'hist-lisboa-20250917':{rankPts:8,rankDate:'2025-09-17'},
+    'hist-guimaraes-20250910':{rankPts:5,rankDate:'2025-09-10'},
+    'hist-oeiras-20250903':{rankPts:14,rankDate:'2025-09-03'},
+    'hist-belgrade-20250820':{rankPts:5,rankDate:'2025-08-20'},
+    'hist-vilamoura-20250813':{rankPts:8,rankDate:'2025-08-13'},
+    'hist-portimao-20250805':{rankPts:5,rankDate:'2025-08-05'},
+    'hist-oporto-mimosa-20250722':{rankPts:5,rankDate:'2025-07-22'},
+    'hist-aveiro-20250716':{rankPts:8,rankDate:'2025-07-16'}
+  };
+  // Historical 2025 tournaments not in base calendar — add them so points show + are searchable
+  const HIST_TOURNAMENTS=[
+    {id:'hist-crete-20251121',y:2025,name:'FIP Bronze Lyttos III',city:'Creta',country:'GRE',tier:'bronze',pts:40,dateStart:'2025-11-21',dateEnd:'2025-11-23',draw:'2025-11-21',fpp:false,hist:true},
+    {id:'hist-oporto-bioniq-20251112',y:2025,name:'FIP Silver Bioniq Oporto',city:'Porto',country:'POR',tier:'silver',pts:80,dateStart:'2025-11-12',dateEnd:'2025-11-16',draw:'2025-11-12',fpp:true,hist:true},
+    {id:'hist-piacenza-20251008',y:2025,name:'FIP Bronze Confapi Piacenza',city:'Piacenza',country:'ITA',tier:'bronze',pts:40,dateStart:'2025-10-08',dateEnd:'2025-10-12',draw:'2025-10-08',fpp:false,hist:true},
+    {id:'hist-almeirim-20251002',y:2025,name:'FIP Bronze Almeirim',city:'Almeirim',country:'POR',tier:'bronze',pts:40,dateStart:'2025-10-02',dateEnd:'2025-10-05',draw:'2025-10-02',fpp:true,hist:true},
+    {id:'hist-lisboa-20250917',y:2025,name:'FIP Silver Lisboa Racket Centre',city:'Lisboa',country:'POR',tier:'silver',pts:80,dateStart:'2025-09-17',dateEnd:'2025-09-21',draw:'2025-09-17',fpp:true,hist:true},
+    {id:'hist-guimaraes-20250910',y:2025,name:'FIP Silver Guimaraes',city:'Guimarães',country:'POR',tier:'silver',pts:80,dateStart:'2025-09-10',dateEnd:'2025-09-14',draw:'2025-09-10',fpp:true,hist:true},
+    {id:'hist-oeiras-20250903',y:2025,name:'FIP Silver Beefeater 0.0',city:'Oeiras',country:'POR',tier:'silver',pts:80,dateStart:'2025-09-03',dateEnd:'2025-09-07',draw:'2025-09-03',fpp:true,hist:true},
+    {id:'hist-belgrade-20250820',y:2025,name:'FIP Silver Belgrade',city:'Belgrado',country:'SRB',tier:'silver',pts:80,dateStart:'2025-08-20',dateEnd:'2025-08-24',draw:'2025-08-20',fpp:false,hist:true},
+    {id:'hist-vilamoura-20250813',y:2025,name:'FIP Bronze Vilamoura Summer Cup',city:'Vilamoura',country:'POR',tier:'bronze',pts:40,dateStart:'2025-08-13',dateEnd:'2025-08-17',draw:'2025-08-13',fpp:true,hist:true},
+    {id:'hist-portimao-20250805',y:2025,name:'FIP Silver Portimao',city:'Portimão',country:'POR',tier:'silver',pts:80,dateStart:'2025-08-05',dateEnd:'2025-08-10',draw:'2025-08-05',fpp:true,hist:true},
+    {id:'hist-oporto-mimosa-20250722',y:2025,name:'FIP Silver Mimosa Oporto',city:'Porto',country:'POR',tier:'silver',pts:80,dateStart:'2025-07-22',dateEnd:'2025-07-27',draw:'2025-07-22',fpp:true,hist:true},
+    {id:'hist-aveiro-20250716',y:2025,name:'FIP Bronze Aveiro',city:'Aveiro',country:'POR',tier:'bronze',pts:40,dateStart:'2025-07-16',dateEnd:'2025-07-20',draw:'2025-07-16',fpp:true,hist:true}
+  ];
+  HIST_TOURNAMENTS.forEach(ht=>{
+    if(!userTournaments.find(x=>x.id===ht.id)) userTournaments.push(ht);
+  });
+  Object.entries(RANK_HISTORY).forEach(([tid,data])=>{
+    if(!userData[tid]) userData[tid]={};
+    if(userData[tid].rankPts===undefined||userData[tid].rankPts===null){
+      userData[tid].rankPts=data.rankPts;
+      userData[tid].rankDate=data.rankDate;
+    }
+  });
   // Pre-load known results if not already present
   const ljId='26t-fip-bronze-slovenia-09062026';
   if(!userData[ljId]) userData[ljId]={};
@@ -872,7 +926,8 @@ function renderStats(){
   const pp=all.filter(t=>['major','p1','p2'].includes(t.tier)).length;
   const fipT=all.filter(t=>['platinum','gold','silver','bronze'].includes(t.tier)).length;
   const totalPrize=all.reduce((sum,t)=>sum+(getU(t.id).prize||0),0);
-  document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div>${totalPrize>0?`<div class="stat"><div class="stat-n" style="color:var(--gold)">${totalPrize}€</div><div class="stat-l">Prize Money</div></div>`:''}`;
+  const rankTotal=calcTotalRankPts();
+  document.getElementById('statsBar').innerHTML=`<div class="stat"><div class="stat-n">${all.length}</div><div class="stat-l">Total</div></div><div class="stat"><div class="stat-n" style="color:var(--p1)">${pp}</div><div class="stat-l">Premier</div></div><div class="stat"><div class="stat-n" style="color:var(--platinum)">${fipT}</div><div class="stat-l">FIP Tour</div></div><div class="stat"><div class="stat-n" style="color:var(--gold-t)">${confirmed}</div><div class="stat-l">Confirmados</div></div><div class="stat"><div class="stat-n" style="color:var(--gold)">${starred}</div><div class="stat-l">⭐</div></div><div class="stat-sep"></div><div class="stat stat-rank"><div class="stat-n" style="color:var(--platinum)">${rankTotal}</div><div class="stat-l">Pontos FIP</div></div>${totalPrize>0?`<div class="stat"><div class="stat-n" style="color:var(--gold)">${totalPrize}€</div><div class="stat-l">Prize Money</div></div>`:''}`;
 }
 
 // Relevance order for sorting within a week
@@ -963,6 +1018,7 @@ function renderCard(t){
   let xb='';
   if(u.partner)xb+=`<span class="badge badge-partner">👤 ${u.partner}</span>`;
   if(u.prize)xb+=`<span class="badge badge-prize">💰 ${u.prize}€</span>`;
+  if(u.rankPts)xb+=`<span class="badge badge-rankpts">🏆 ${u.rankPts}pts</span>`;
   if(u.status==='confirmado')xb+='<span class="badge badge-go">✓ GO</span>';
   else if(u.status==='tentativo')xb+='<span class="badge badge-maybe">? Talvez</span>';
   else if(u.status==='nao-vou')xb+='<span class="badge badge-no">✗ Não</span>';
@@ -1046,6 +1102,11 @@ ${t.qual?`<div class="date-pill qual"><div class="dp-lbl">QUALIFYING</div><div c
     <label>PRIZE €</label>
     <input class="res-prize-input" type="number" min="0" step="1" placeholder="ex: 500" value="${u.prize||''}"
       onchange="setPrize('${t.id}',this.value)" autocomplete="off">
+  </div>
+  <div class="res-prize-row">
+    <label>PTS FIP</label>
+    <input class="res-prize-input" type="number" min="0" step="1" placeholder="ex: 25" value="${u.rankPts||''}"
+      onchange="setRankPts('${t.id}',this.value)" autocomplete="off">
   </div>
   <div class="rounds-list">${roundsHtml}</div>
 </div>
@@ -1189,6 +1250,23 @@ function toggleStar(e,id){e.stopPropagation();const on=!getU(id).starred;setU(id
 function setStatus(id,v){setUObj(id,{status:v});renderList();renderStats();}
 function setPartner(id,v){setU(id,'partner',v.trim());renderList();}
 function setPrize(id,v){const n=parseFloat(v);setU(id,'prize',isNaN(n)?null:n);renderList();renderStats();}
+function setRankPts(id,v){const n=parseInt(v);setU(id,'rankPts',isNaN(n)?null:n);renderList();renderStats();}
+function rankPtsActive(t){
+  // Points valid for 52 weeks (364 days) from the tournament's reference date.
+  const u=getU(t.id);
+  if(!u.rankPts||u.rankPts<=0) return 0;
+  const refDate=u.rankDate||t.dateStart;
+  const d=new Date(refDate+'T12:00:00');
+  const expires=new Date(d.getTime()+364*24*60*60*1000);
+  return expires>new Date()?u.rankPts:0;
+}
+function calcTotalRankPts(){
+  // Sum active ranking points, best 22 results (FIP rule).
+  let pts=[];
+  tournaments.forEach(t=>{const p=rankPtsActive(t);if(p>0)pts.push(p);});
+  pts.sort((a,b)=>b-a);
+  return pts.slice(0,22).reduce((s,p)=>s+p,0);
+}
 function setNotes(id,v){setU(id,'notes',v);}
 function setYear(y,el){activeYear=y;document.querySelectorAll('.year-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');openCardId=null;activeWeekMonday=null;updateWeekUI();renderStats();renderList();}
 function setFilter(f,el){activeFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderList();}
@@ -1245,7 +1323,7 @@ function exportExcel(){
   if(!list.length){toast('Nenhum torneio para exportar');return;}
   
   const rows = [
-    ['Favorito','Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','Prize €','FPP','Notas','Ronda','Adversário 1','Adversário 2','Resultado','V/D']
+    ['Favorito','Nome','Cidade','País','Categoria','Pontos FIP','Início','Fim','Qualifying','Quadro Principal','Estado','Parceiro','Prize €','Pts Ranking','FPP','Notas','Ronda','Adversário 1','Adversário 2','Resultado','V/D']
   ];
   
   list.forEach(t => {
@@ -1265,6 +1343,7 @@ function exportExcel(){
       u.status === 'confirmado' ? 'Confirmado' : u.status === 'tentativo' ? 'Tentativo' : u.status === 'nao-vou' ? 'Não vou' : '',
       u.partner || '',
       u.prize || '',
+      u.rankPts || '',
       t.fpp ? 'Sim' : '',
       u.notes || ''
     ];
@@ -1279,7 +1358,7 @@ function exportExcel(){
         if(i === 0){
           rows.push([...baseRow, round, res.opp1||'', res.opp2||'', res.result||'', win?'V':'D']);
         } else {
-          rows.push(['','','','','','','','','','','','','','','', round, res.opp1||'', res.opp2||'', res.result||'', win?'V':'D']);
+          rows.push(['','','','','','','','','','','','','','','','', round, res.opp1||'', res.opp2||'', res.result||'', win?'V':'D']);
         }
       });
     }
